@@ -19,6 +19,9 @@ def test_ensure_pdf_one(tmp_path, img_fn):
 
     assert inspect.is_pdf(out_fn)
 
+    with pytest.raises(FileExistsError):
+        ensure_pdf.one(fn,  dest =out_fn, override=False)
+
 
 def test_ensure_pdf_bulk():
     tmp_path = "tmp"
@@ -29,3 +32,13 @@ def test_ensure_pdf_bulk():
 
     assert inspect.is_pdf(dest)
 
+
+def test_ensure_pdf_bulk_no_override():
+    tmp_path = "tmp"
+    source = img_path    
+    dest = os.path.join(tmp_path, "out")
+
+    ensure_pdf.bulk(source, dest)
+
+    with pytest.raises(FileExistsError):
+        ensure_pdf.bulk(source, dest, silent_errors=False, override=False)

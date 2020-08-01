@@ -4,6 +4,10 @@ import fitz
 import shutil
 import tqdm
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 from . import inspect
         
 
@@ -16,7 +20,9 @@ def ensure_folder(path):
         pass
 
 
-def one(source, dest):
+def one(source, dest, override=True):
+    if os.path.isfile(dest) and not override:
+        raise FileExistsError(f"dest exists {source} -> {dest}")
 
     if inspect.is_pdf(source):
         shutil.copy(source, dest)
@@ -38,9 +44,18 @@ def source_dest_pairs(source_path, dest_path, ensure_dest_paths=True):
             dest = os.path.join(dest_path,fn)
             yield source, dest
 
-def bulk(source_path, dest_path):
+def bulk(source_path, dest_path, silent_errors=False, override=True):
     sd = list(source_dest_pairs(source_path, dest_path, ensure_dest_paths=True))
 
     for s,d in tqdm.tqdm(sd, desc="Converting to pdf"):
-        one(s,f"{d}.pdf")
+        dest = f"{d}.pdf"
+        try:
+            one(s,dest, override=override)
+        except Exception as e:
+            logger.exception(f"Cannot ensure pdf {s} -> {dest} ", stack_info=True)
+            if not silent_errors:
+                raise e
+            
+            if isinstance(e, KeyboardInterrupt):
+                raise e
 
