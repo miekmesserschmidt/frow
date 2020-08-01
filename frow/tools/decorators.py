@@ -1,6 +1,14 @@
 import logging
+import os 
 
 logger = logging.getLogger(__name__)
+
+
+def ensure_path(path):
+    try:
+        os.makedirs(path)
+    except FileExistsError:
+        pass
 
 
 def with_silence_errors_toggle(f):
@@ -15,3 +23,13 @@ def with_silence_errors_toggle(f):
                 raise e
 
     return wrapper
+
+def with_overwrite_toggle(f):
+    def wrapper(source_fn, dest_fn, *args, overwrite=True, **kwargs):
+        if os.path.isfile(dest_fn) and not overwrite:
+            return dest_fn
+        else:
+            return f(source_fn, dest_fn, *args, **kwargs)
+
+    return wrapper
+

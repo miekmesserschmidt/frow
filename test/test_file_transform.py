@@ -67,15 +67,3 @@ def test_merge_pdf(tmp_path):
     assert A.pageCount == 5 
 
 
-def test_refit(tmp_path):
-
-    fn = os.path.join("test/fixtures/sub_folder_merge", "a", "0.pdf")
-    out = os.path.join(tmp_path, "0.pdf")
-
-
-    file_transform.refit_pdf(fn, out, rect=.8* file_transform.A4)
-    
-    assert inspect.is_pdf(out)
-
-    A = fitz.open(out)
-    assert A.pageCount == 4
