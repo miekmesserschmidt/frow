@@ -3,3 +3,4 @@ env
 *.pyc
 tmp
 .pytest_cache
+.vscode
