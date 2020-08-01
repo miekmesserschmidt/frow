@@ -1,7 +1,7 @@
 import fitz
 import os
 import pytest
-from frow import file_transform, inspect
+from frow.tools import file_transform, inspect
 
 def test_ensure_path(tmp_path):
     p = os.path.join(tmp_path, "a")
@@ -64,9 +64,9 @@ def test_merge_pdf(tmp_path):
     assert inspect.is_pdf(out)
 
     A = fitz.open(out)
-    assert A.pageCount == 5    
+    assert A.pageCount == 5 
 
-
+    
 def test_refit(tmp_path):
 
     fn = os.path.join("test/fixtures/sub_folder_merge", "a", "0.pdf")

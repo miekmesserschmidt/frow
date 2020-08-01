@@ -5,7 +5,7 @@ import fitz
 import pytest
 import subprocess
 import os 
-from frow import bubbles
+from frow.tools import bubbles
 from PIL import Image
 
 

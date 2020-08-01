@@ -1,7 +1,7 @@
 import pytest
 import subprocess
 import os 
-from frow import inspect
+from frow.tools import inspect
 
 
 img_path = "test/fixtures/img"
