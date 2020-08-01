@@ -1,7 +1,10 @@
+import pyfunctional
 import os
 import shutil
 import re
 import logging
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +17,9 @@ def cp_structure_func(source_fn, dest_root, override=True):
     if dest_exists(source_fn, dest_root) and not override:
         raise FileExistsError(f"dest exists: {source_fn} -> {dest_root}")
     shutil.copy(source_fn, dest_root)
+
+
+
 
 
 def st_num_structure_func(source_fn, dest_root, override=True):
@@ -51,3 +57,15 @@ def bulk(source, dest, structure_func=cp_structure_func, override=True, silent_e
                     raise
                 if isinstance(e, KeyboardInterrupt):
                     raise
+
+
+
+def st_num_from(s):
+    st_num_regex = re.compile(r"u\d{8}")
+
+    if not (found := st_num_regex.search(s)):
+        raise NameError(f"{s} has no st_number")
+
+    return found.group(0)
+
+

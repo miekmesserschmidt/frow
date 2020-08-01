@@ -4,31 +4,48 @@ import frow.tools.path_iters as tools
 
 fixture_path = "test/fixtures/walk"
 
+@pytest.mark.parametrize("iter_type, expected", [
+    (tools.FilesRecursive, set(["a","d/b","b/a"])),
+    (tools.DirsRecursive, set(["b", "d", "b/c"])),
+    (tools.FilesNonRecursive, set(["a"])),
+    (tools.DirsNonRecursive, set(["b", "d"])),
+])
+def test_files_iter(iter_type, expected):
+    out = set(d for _, d in iter_type(fixture_path))
 
-def test_files_recursive():
-    out = set(d for _, d in tools.FilesRecursive(fixture_path))
-
-    assert set(out) == set(["a","d/b","b/a"])
-
-
-
-
-def test_folders_recursive():
-    out = set(d for _, d in tools.DirsRecursive(fixture_path))
-
-    assert set(out) == set(["b","b/c","d"])
+    assert set(out) == expected
 
 
-def test_files_nonrecursive():
-    out = set(d for _, d in tools.FilesNonRecursive(fixture_path))
+@pytest.mark.parametrize("iter_type, expected", [
+    (tools.FilesRecursive, set(["a","d/b","b/a"])),
+    (tools.DirsRecursive, set(["b", "d", "b/c"])),
+    (tools.FilesNonRecursive, set(["a"])),
+    (tools.DirsNonRecursive, set(["b", "d"])),
+])
+def test_files_iter_joined(iter_type, expected):
+    out = set(d for d in iter_type(fixture_path).joined())
 
-    assert set(out) == set(["a"])
+    assert set(out) == set( os.path.join(fixture_path,f) for f in expected)
 
 
 
 
-def test_folders_nonrecursive():
-    out = set(d for _, d in tools.DirsNonRecursive(fixture_path))
+# def test_folders_recursive():
+#     out = set(d for _, d in tools.DirsRecursive(fixture_path))
 
-    assert set(out) == set(["b","d"])
+#     assert set(out) == set(["b","b/c","d"])
+
+
+# def test_files_nonrecursive():
+#     out = set(d for _, d in tools.FilesNonRecursive(fixture_path))
+
+#     assert set(out) == set(["a"])
+
+
+
+
+# def test_folders_nonrecursive():
+#     out = set(d for _, d in tools.DirsNonRecursive(fixture_path))
+
+#     assert set(out) == set(["b","d"])
 

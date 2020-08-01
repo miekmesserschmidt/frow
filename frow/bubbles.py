@@ -106,7 +106,7 @@ class BubbleReader:
         return sum(low)/self.block_size**2
 
     @property
-    def block_activations(self, threshold=.02):
+    def block_activations(self):
         mat = np.zeros(shape=(self.grid_h,self.grid_w))
         for x,y in itertools.product(range(self.grid_w), range(self.grid_h)):
             mat[y,x] = self.block_val(x,y)
