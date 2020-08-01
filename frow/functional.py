@@ -25,6 +25,8 @@ def silent_errors(it, logger=None):
         except Exception as e:
             if logger:
                 logger.exception(f"Error {e}",stack_info=True)
+
+            print(e)
             
 
         

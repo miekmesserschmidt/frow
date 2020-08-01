@@ -5,7 +5,7 @@ import fitz
 import pytest
 import subprocess
 import os 
-from frow import ensure_pdf, inspect, merge,  bubbles
+from frow import bubbles
 from PIL import Image
 
 
