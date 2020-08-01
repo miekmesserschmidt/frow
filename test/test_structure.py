@@ -27,7 +27,7 @@ def test_structure(tmp_path):
     r = (
         functional.seq(raw_fns)                                             # ->(source_fn)
         .map_with_args_kwargs(make_source_dest_pair, dest_path = tmp_path)  # ->(source_fn, dest_fn)
-        .starmap(file_transform.copy_file)                                  # ->(dest_fn)
+        .starmap_with_args_kwargs(file_transform.copy_file, overwrite=True) # ->(dest_fn)
     ).list()
 
     print(r)
