@@ -24,10 +24,16 @@ def order_points(pts):
 
 class BubbleReader:
 
-    def __init__(self, pil_image, qr_data, block_size = 100):
+    def __init__(self, pil_image, block_size = 100):
         self.im = pil_image
-        self.qr_data = qr_data        
-        self.bubbles_json = json.loads(qr_data.data)
+        qr_list = decode(pil_image)
+        if len(qr_list) > 1:
+            raise ValueError("More than one qr code detected")
+        if len(qr_list) == 0:
+            raise ValueError("No qr code detected")
+        self.qr_data = qr_list[0]
+
+        self.bubbles_json = json.loads(self.qr_data.data)
 
         self.scale = self.bubbles_json["scale"]
         self.grid_w = self.bubbles_json["grid_w"]
