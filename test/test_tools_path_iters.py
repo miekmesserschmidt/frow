@@ -28,24 +28,3 @@ def test_files_iter_joined(iter_type, expected):
     assert set(out) == set( os.path.join(fixture_path,f) for f in expected)
 
 
-
-
-# def test_folders_recursive():
-#     out = set(d for _, d in tools.DirsRecursive(fixture_path))
-
-#     assert set(out) == set(["b","b/c","d"])
-
-
-# def test_files_nonrecursive():
-#     out = set(d for _, d in tools.FilesNonRecursive(fixture_path))
-
-#     assert set(out) == set(["a"])
-
-
-
-
-# def test_folders_nonrecursive():
-#     out = set(d for _, d in tools.DirsNonRecursive(fixture_path))
-
-#     assert set(out) == set(["b","d"])
-

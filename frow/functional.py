@@ -7,5 +7,24 @@ def zipmap(it, func):
 
 @functional.pipeline.extend()
 def map_with_args_kwargs(it, func, *args, **kwargs):
-    gunc = lambda x : functools.partial(func, x, *args, **kwargs)()
-    return map(gunc, it)
+    g = lambda x : functools.partial(func, x, *args, **kwargs)()
+    return map(g, it)
+
+
+@functional.pipeline.extend()
+def silent_errors(it, logger=None):
+    I = iter(it)
+
+    while True:
+        try:
+            yield next(I)
+        except StopIteration:
+            return
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            if logger:
+                logger.exception(f"Error {e}",stack_info=True)
+            
+
+        
