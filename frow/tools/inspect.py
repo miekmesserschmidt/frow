@@ -5,12 +5,10 @@ import shutil
 import tqdm
 
 
-        
-
-
 def _is_pdf_single(fn):
     s = fitz.open(fn)
     return "PDF" in s.metadata["format"]
+
 
 def _is_pdf_all(path):
     for root, dirs, files in os.walk(path):
@@ -21,7 +19,6 @@ def _is_pdf_all(path):
 
     else:
         return True
-
 
 
 def is_pdf(path):

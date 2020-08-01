@@ -1,5 +1,5 @@
 import pytest
-from frow import functional as frow_func
+from frow.tools import functional as frow_func
 import functional
 
 

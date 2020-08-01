@@ -4,8 +4,7 @@ logger = logging.getLogger(__name__)
 
 
 def with_silence_errors_toggle(f):
-
-    def wrapper(*args, silence_errors = False, **kwargs):
+    def wrapper(*args, silence_errors=False, **kwargs):
         try:
             f(*args, **kwargs)
         except Exception as e:

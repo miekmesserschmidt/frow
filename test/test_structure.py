@@ -1,5 +1,4 @@
 import functional
-import frow.functional
 import os
 import pytest
 
@@ -26,9 +25,9 @@ def test_structure(tmp_path):
 
     raw_fns = path_iters.FilesRecursive(fixture_path).joined()
     r = (
-        functional.seq(raw_fns) 
-        .map_with_args_kwargs(make_source_dest_pair, dest_path = tmp_path)  # (source_fn, dest_fn)
-        .starmap(file_transform.copy_file)                                  # (dest_fn)
+        functional.seq(raw_fns)                                             # ->(source_fn)
+        .map_with_args_kwargs(make_source_dest_pair, dest_path = tmp_path)  # ->(source_fn, dest_fn)
+        .starmap(file_transform.copy_file)                                  # ->(dest_fn)
     ).list()
 
     print(r)
