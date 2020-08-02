@@ -16,7 +16,6 @@ def add_page_id_marks(fitz_doc, paste_relative_rect, doc_id, page_data_gen = pag
     for i, page in enumerate(fitz_doc.pages()):        
         data = page_data_gen(doc_id, i, total_pages=fitz_doc.pageCount)
         qr_pdf = qr.qr_pdf( data, **qr_kwargs)
-        # qr_pdf.save(f"/tmp/id_mark{i}.pdf")
         
         pdf_transform.paste_pdf_on(page, qr_pdf, relative_rect=paste_relative_rect, **paste_kwargs)
 

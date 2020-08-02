@@ -20,5 +20,5 @@ def test_add_page_id_marks(tmp_path):
 
     doc.save(out)
 
-    subprocess.call(["xdg-open", out])
+    # subprocess.call(["xdg-open", out])
 

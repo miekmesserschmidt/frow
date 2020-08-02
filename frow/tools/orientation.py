@@ -6,7 +6,7 @@ from . import box, qr
 def default_activation(qr_codes):
     return len(qr_codes) > 0
 
-def orientation_vector_from_qr(fitz_page, relative_window = (0,0, .5,.5), activation=default_activation):
+def orientation_vector_from_qr(fitz_page, relative_window = None, abs_window=None, activation=default_activation):
     """
     Determines the orientation of a page by detecting qr_codes
 
@@ -20,7 +20,9 @@ def orientation_vector_from_qr(fitz_page, relative_window = (0,0, .5,.5), activa
         np.array: the activation for the four corners in the order (top_left, top_right, bottom_right, bottom_left)
     """
 
-    abs_window = box.absolute_box(relative_window, fitz_page.rect)
+    abs_window = box.ensure_absolute_box(relative_window, abs_window, fitz_page.rect)
+
+    # abs_window = box.absolute_box(relative_window, fitz_page.rect)
     window_w =  abs_window[2]-abs_window[0]
     window_h = abs_window[3]-abs_window[1]
 
@@ -35,10 +37,10 @@ def orientation_vector_from_qr(fitz_page, relative_window = (0,0, .5,.5), activa
     br_offset = np.array([w-window_w,h-window_h]*2)
 
 
-    abs_window_tl = fitz.Rect(tl_offset + abs_window).transform(fitz_page.rotationMatrix)
-    abs_window_tr = fitz.Rect(tr_offset + abs_window).transform(fitz_page.rotationMatrix)
-    abs_window_bl = fitz.Rect(bl_offset + abs_window).transform(fitz_page.rotationMatrix)
-    abs_window_br = fitz.Rect(br_offset + abs_window).transform(fitz_page.rotationMatrix)
+    abs_window_tl = tl_offset + abs_window
+    abs_window_tr = tr_offset + abs_window
+    abs_window_bl = bl_offset + abs_window
+    abs_window_br = br_offset + abs_window
     
     windows = [abs_window_tl,abs_window_tr,abs_window_br,abs_window_bl]
 

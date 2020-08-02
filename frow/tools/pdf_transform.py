@@ -24,19 +24,13 @@ def refit_pdf(
     Returns:
         dest_fn
     """
-    assert not (relative_paste_rect is not None and abs_paste_rect is not None)
-
-    if not relative_paste_rect is not None and not abs_paste_rect is not None:
-        abs_paste_rect = A4
-    elif relative_paste_rect is not None:
-        abs_paste_rect = box.absolute_box(relative_paste_rect, A4)
+    abs_paste_rect = box.ensure_absolute_box(relative_paste_rect, abs_paste_rect, A4)
 
     source_pdf = fitz.open(source_fn)
 
     d = fitz.open()
 
     for i, page in enumerate(source_pdf.pages()):
-        # page_abs_paste_rect = fitz.Rect(abs_paste_rect).transform(page.rotationMatrix)
 
         new_page = d.newPage()
         new_page.showPDFpage(
@@ -67,23 +61,13 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
 
     Returns:
         fitz_page
-    """
-    assert not (relative_rect is not None and absolute_rect is not None)
+    """    
+    abs_paste_rect = box.ensure_absolute_box(relative_rect, absolute_rect, fitz_page.rect)
 
-    if not relative_rect is not None and not absolute_rect is not None:
-        absolute_rect = A4
-    elif relative_rect is not None:
-        abs_paste_rect = box.absolute_box(relative_rect, fitz_page.rect)
-
-    abs_rect = fitz.Rect(box.absolute_box(relative_rect, fitz_page.rect)).transform(
-        fitz_page.rotationMatrix
-    )
-    fitz_page.showPDFpage(abs_rect, source, **kwargs)
+    fitz_page.showPDFpage(abs_paste_rect, source, **kwargs)
     return fitz_page
 
 
-# from svglib.svglib import svg2rlg
-# from reportlab.graphics import renderPDF
 import io
 
 

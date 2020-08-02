@@ -10,7 +10,7 @@ from . import box
 
 
 def qr_pdf(
-    data : str,
+    data: str,
     dimensions=(200, 100),
     qr_relative_rect=(0.5, 0, 1, 1),
     text_relative_rect=(0, 0, 0.5, 1),
@@ -58,12 +58,7 @@ def grab_qr_codes(fitz_page, relative_window_rect=None, abs_window_rect=None, zo
     Returns:
         [list]: list of all the qr_codes detected
     """
-    assert not (relative_window_rect is not None and abs_window_rect is not None)
-
-    if (relative_window_rect is None) and (abs_window_rect is None):
-        abs_window_rect = fitz_page.rect
-    elif relative_window_rect is not None:
-        abs_window_rect = box.absolute_box(relative_window_rect, fitz_page.rect)
+    abs_window_rect = box.ensure_absolute_box(relative_window_rect, abs_window_rect, fitz_page.rect)
 
     old_crop = fitz_page.CropBox
 
