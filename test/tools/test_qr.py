@@ -4,7 +4,7 @@ from PIL import Image
 import subprocess
 import os
 import pytest
-from frow.tools import qr
+from frow.tools import qr, box
 from pyzbar.pyzbar import decode
 import functional
 import json
@@ -32,7 +32,7 @@ def test_qr_pdf(tmp_path, data):
 
 
 
-def test_grab_qr_codes(tmp_path, ):
+def test_grab_qr_codes_rel(tmp_path, ):
 
     in_fn = "test/fixtures/bubble/bubbles_st_num_rot.pdf"
     doc = fitz.open(in_fn)
@@ -43,6 +43,27 @@ def test_grab_qr_codes(tmp_path, ):
     
     bl_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_left)
     br_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_right)
+    whole = qr.grab_qr_codes(doc[0])
+
+    assert len(bl_qr) == 1
+    assert len(br_qr) == 0
+    assert len(whole) == 1
+    # subprocess.call(["xdg-open", out_fn])
+
+
+
+
+def test_grab_qr_codes_abs(tmp_path, ):
+
+    in_fn = "test/fixtures/bubble/bubbles_st_num_rot.pdf"
+    doc = fitz.open(in_fn)
+    
+    
+    bottom_left = box.absolute_box((0,.5,.5,1), doc[0].rect)
+    bottom_right = box.absolute_box((.5,.5,1,1), doc[0].rect)
+    
+    bl_qr = qr.grab_qr_codes(doc[0], abs_window_rect=bottom_left)
+    br_qr = qr.grab_qr_codes(doc[0], abs_window_rect=bottom_right)
     whole = qr.grab_qr_codes(doc[0])
 
     assert len(bl_qr) == 1

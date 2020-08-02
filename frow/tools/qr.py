@@ -6,6 +6,8 @@ from pyzbar.pyzbar import decode
 import numpy as np
 from PIL import Image
 
+from . import box
+
 def qr_pdf(
     data,
     dimensions=(200, 100),
@@ -14,36 +16,33 @@ def qr_pdf(
     fontsize = 10,
 ):
     w, h = dimensions
+    abs_box = (0,0,w,h)
 
     doc = fitz.open()
     page = doc.newPage(width=w, height=h)
 
-    scaling = np.array([w, h, w, h])    
-    qr_rect = np.array(qr_relative_rect) * scaling
+    qr_rect = box.absolute_box(qr_relative_rect, abs_box)
+    text_rect = box.absolute_box(text_relative_rect, abs_box)
+
     qr_png_data_stream = io.BytesIO()
     qrcode.make(data).save(qr_png_data_stream, format = "png")
-    page.insertImage(qr_rect, stream=io.BytesIO(qr_png_data_stream.getvalue()))
-
-    text_rect = np.array(text_relative_rect) * scaling
+    page.insertImage(qr_rect, stream=qr_png_data_stream)
+    
     page.insertTextbox(text_rect, buffer=data, fontsize=fontsize)
 
     return doc
 
 
 
-def grab_qr_codes(fitz_page, relative_window_rect=None, zoom=2):
+def grab_qr_codes(fitz_page, relative_window_rect=None, abs_window_rect=None, zoom=2):
+    assert not (relative_window_rect is not None and abs_window_rect is not None)  
+
+    if (relative_window_rect is None) and (abs_window_rect is None):
+        abs_window_rect = fitz_page.rect
+    elif relative_window_rect is not None:
+        abs_window_rect = box.absolute_box(relative_window_rect, fitz_page.rect)
+
     old_crop = fitz_page.CropBox
-
-    page_rect = np.array(fitz_page.bound())
-    w = page_rect[2] - page_rect[0]
-    h = page_rect[3] - page_rect[1]
-    scale = np.array([w,h,w,h])
-
-
-    if not relative_window_rect:
-        abs_window_rect = page_rect
-    else:
-        abs_window_rect = np.array(relative_window_rect) * scale
 
 
     fitz_page.setCropBox(abs_window_rect)

@@ -21,7 +21,7 @@ def test_reflow_add_score(tmp_path):
     out_fn = os.path.join(tmp_path, "a.pdf")
     out_fnb = os.path.join(tmp_path, "b.pdf")
 
-    pdf_transform.refit_pdf(pdf_fn, out_fn, rect=0.88 * pdf_transform.A4)
+    pdf_transform.refit_pdf(pdf_fn, out_fn, relative_paste_rect=(0,0,.88,.88))
 
     doc = fitz.open(out_fn)
     score_doc = fitz.open(score_fn)

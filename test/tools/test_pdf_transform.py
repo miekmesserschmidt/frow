@@ -11,7 +11,7 @@ def test_refit(tmp_path):
     out = os.path.join(tmp_path, "0.pdf")
 
 
-    pdf_transform.refit_pdf(fn, out, rect=.8* pdf_transform.A4)
+    pdf_transform.refit_pdf(fn, out, relative_paste_rect=(0,0,.8,.8))
     
     assert inspect.is_pdf(out)
 
