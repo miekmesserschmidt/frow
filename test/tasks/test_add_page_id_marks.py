@@ -15,7 +15,7 @@ def test_add_page_id_marks(tmp_path):
 
     doc = fitz.open(fn)
 
-    tasks.add_page_id_marks(doc, (.8,.9,.95,.99), doc_id = "4444")
+    tasks.add_page_id_marks(doc, relative_rect= (.8,.9,.95,.99), doc_id = "4444")
 
 
     doc.save(out)
