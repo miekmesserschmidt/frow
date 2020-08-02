@@ -2,8 +2,9 @@ import io
 import qrcode
 import fitz
 
+from pyzbar.pyzbar import decode
 import numpy as np
-
+from PIL import Image
 
 def qr_pdf(
     data,
@@ -27,4 +28,35 @@ def qr_pdf(
     page.insertTextbox(text_rect, buffer=data, fontsize=fontsize)
 
     return doc
+
+
+
+def grab_qr_codes(fitz_page, relative_window_rect=None, zoom=2):
+    old_crop = fitz_page.CropBox
+
+    page_rect = np.array(fitz_page.bound())
+    w = page_rect[2] - page_rect[0]
+    h = page_rect[3] - page_rect[1]
+    scale = np.array([w,h,w,h])
+
+
+    if not relative_window_rect:
+        abs_window_rect = page_rect
+    else:
+        abs_window_rect = np.array(relative_window_rect) * scale
+
+
+    fitz_page.setCropBox(abs_window_rect)
+
+    matrix = fitz.Matrix(zoom, zoom)
+    data = fitz_page.getPixmap(matrix=matrix).getImageData()
+    im = Image.open(io.BytesIO(data))
+    qr_codes = decode(im)
+
+    fitz_page.setCropBox(old_crop)
+
+    return qr_codes
+
+    
+
 

@@ -8,6 +8,8 @@ from frow.tools import qr
 from pyzbar.pyzbar import decode
 import functional
 import json
+
+
 @pytest.mark.parametrize("data", 
     [
         "data",
@@ -26,6 +28,26 @@ def test_qr_pdf(tmp_path, data):
 
     decode(im)[0].data == data
 
+    # subprocess.call(["xdg-open", out_fn])
+
+
+
+def test_grab_qr_codes(tmp_path, ):
+
+    in_fn = "test/fixtures/bubble/bubbles_st_num_rot.pdf"
+    doc = fitz.open(in_fn)
+    
+    
+    bottom_left = (0,.5,.5,1)
+    bottom_right = (.5,.5,1,1)
+    
+    bl_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_left)
+    br_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_right)
+    whole = qr.grab_qr_codes(doc[0])
+
+    assert len(bl_qr) == 1
+    assert len(br_qr) == 0
+    assert len(whole) == 1
     # subprocess.call(["xdg-open", out_fn])
 
 
