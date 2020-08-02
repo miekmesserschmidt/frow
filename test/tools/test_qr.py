@@ -13,7 +13,8 @@ import json
 @pytest.mark.parametrize("data", 
     [
         "data",
-        json.dumps({"type" : "page_info", "doc_id" : "fa3ab3", "page_no" :"1"})
+        json.dumps({"type" : "page_info", "doc_id" : "fa3ab3", "page_no" :"1"}),
+        json.dumps({"type" : "page_info", "doc_id" : "verylongdocidnospaces", "page_no" :"1"})
     ]
 )
 def test_qr_pdf(tmp_path, data):

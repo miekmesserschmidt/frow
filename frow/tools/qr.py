@@ -38,7 +38,7 @@ def qr_pdf(
     text_rect = box.absolute_box(text_relative_rect, abs_box)
 
     qr_png_data_stream = io.BytesIO()
-    qrcode.make(data).save(qr_png_data_stream, format="png")
+    qrcode.make(data, border=0).save(qr_png_data_stream, format="png")
     page.insertImage(qr_rect, stream=qr_png_data_stream)
 
     page.insertTextbox(text_rect, buffer=data, fontsize=fontsize)

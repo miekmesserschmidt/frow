@@ -1,4 +1,3 @@
-
 import subprocess
 import fitz
 import os
@@ -8,6 +7,7 @@ import frow.tasks.tasks as tasks
 
 import pytest
 
+
 def test_add_page_id_marks(tmp_path):
 
     fn = os.path.join("test/fixtures/sub_folder_merge", "a", "0.pdf")
@@ -15,8 +15,7 @@ def test_add_page_id_marks(tmp_path):
 
     doc = fitz.open(fn)
 
-    tasks.add_page_id_marks(doc, relative_rect= (.8,.9,.95,.99), doc_id = "4444")
-
+    tasks.add_page_id_marks(doc, relative_rect=(0.8, 0.9, 0.95, 0.99), doc_id="4444")
 
     doc.save(out)
 
