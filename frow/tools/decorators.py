@@ -4,12 +4,6 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def ensure_path(path):
-    try:
-        os.makedirs(path)
-    except FileExistsError:
-        pass
-
 
 def with_silence_errors_toggle(f):
     def wrapper(*args, silence_errors=False, **kwargs):
@@ -29,7 +23,7 @@ def with_overwrite_toggle(f):
         if os.path.isfile(dest_fn) and not overwrite:
             return dest_fn
         else:
-            return f(source_fn, dest_fn, *args, **kwargs)
+            return f(source_fn, dest_fn, overwrite=overwrite, *args, **kwargs)
 
     return wrapper
 

@@ -21,7 +21,8 @@ def add_page_id_marks(
     page_data_gen=page_data,
     qr_kwargs={},
     paste_kwargs={},
-):
+): 
+    #TODO docstring
 
     for i, page in enumerate(fitz_doc.pages()):
         data = page_data_gen(doc_id, i, total_pages=fitz_doc.pageCount)

@@ -15,7 +15,7 @@ def ensure_path(path):
 
 
 @decorators.with_overwrite_toggle
-def copy_file(source_fn, dest_fn):
+def copy_file(source_fn, dest_fn, overwrite=True):
     path, _ = os.path.split(dest_fn)
     ensure_path(path)
     shutil.copyfile(source_fn, dest_fn)
@@ -24,7 +24,7 @@ def copy_file(source_fn, dest_fn):
 
 
 @decorators.with_overwrite_toggle
-def ensure_pdf(source_fn, dest_fn):
+def ensure_pdf(source_fn, dest_fn, overwrite=True):
     if inspect.is_pdf(source_fn):
         return copy_file(source_fn, dest_fn, overwrite=overwrite)
     else:
@@ -40,7 +40,7 @@ def ensure_pdf(source_fn, dest_fn):
 
 
 @decorators.with_overwrite_toggle
-def merge_pdf(source_list, dest_fn, override=True):
+def merge_pdf(source_list, dest_fn, overwrite=True):
     b = fitz.open()
     for source_fn in source_list:
         a = fitz.open(source_fn)

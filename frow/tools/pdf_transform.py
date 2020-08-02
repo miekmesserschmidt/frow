@@ -10,7 +10,12 @@ A4 = np.array((0, 0, 595, 842))
 
 @decorators.with_overwrite_toggle
 def refit_pdf(
-    source_fn, dest_fn, relative_paste_rect=None, abs_paste_rect=None, border=True
+    source_fn,
+    dest_fn,
+    relative_paste_rect=None,
+    abs_paste_rect=None,
+    border=True,
+    overwrite=True,
 ):
     """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit.
 
@@ -61,8 +66,10 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
 
     Returns:
         fitz_page
-    """    
-    abs_paste_rect = box.ensure_absolute_box(relative_rect, absolute_rect, fitz_page.rect)
+    """
+    abs_paste_rect = box.ensure_absolute_box(
+        relative_rect, absolute_rect, fitz_page.rect
+    )
 
     fitz_page.showPDFpage(abs_paste_rect, source, **kwargs)
     return fitz_page
