@@ -45,17 +45,18 @@ st_expected = np.array([
     [0,0,0,0,0,0,0,0],
 ])
 
-@pytest.mark.parametrize("fn,expected", [
-    (os.path.join(fixture_path, "a.pdf"), st_expected),
-    (os.path.join(fixture_path, "b.pdf"), st_expected),
-    (os.path.join(fixture_path, "c.pdf"), st_expected),
-    (os.path.join(fixture_path, "d.pdf"), st_expected),
-    (os.path.join(fixture_path, "e.pdf"), st_expected),
+@pytest.mark.parametrize("fn,expected,zoom", [
+    (os.path.join(fixture_path, "a.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "b.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "c.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "d.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "e.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "f.pdf"), st_expected, 5),
 ])
-def test_bubble_matrix(fn, expected):
+def test_bubble_matrix(fn, expected, zoom):
 
     doc = fitz.open(fn)
-    matrix = fitz.Matrix(2, 2)
+    matrix = fitz.Matrix(zoom, zoom)
     data = doc[0].getPixmap(matrix=matrix).getImageData()
     im = Image.open(io.BytesIO(data))
 
