@@ -50,11 +50,12 @@ st_expected = np.array([
     (os.path.join(fixture_path, "b.pdf"), st_expected),
     (os.path.join(fixture_path, "c.pdf"), st_expected),
     (os.path.join(fixture_path, "d.pdf"), st_expected),
+    (os.path.join(fixture_path, "e.pdf"), st_expected),
 ])
 def test_bubble_matrix(fn, expected):
 
     doc = fitz.open(fn)
-    matrix = fitz.Matrix(4, 4)
+    matrix = fitz.Matrix(2, 2)
     data = doc[0].getPixmap(matrix=matrix).getImageData()
     im = Image.open(io.BytesIO(data))
 
