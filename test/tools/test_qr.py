@@ -35,7 +35,7 @@ def test_qr_pdf(tmp_path, data):
 
 def test_grab_qr_codes_rel(tmp_path, ):
 
-    in_fn = "test/fixtures/bubble/bubbles_st_num_rot.pdf"
+    in_fn = "test/fixtures/qr/bubbles_st_num_rot.pdf"
     doc = fitz.open(in_fn)
     
     
@@ -56,7 +56,7 @@ def test_grab_qr_codes_rel(tmp_path, ):
 
 def test_grab_qr_codes_abs(tmp_path, ):
 
-    in_fn = "test/fixtures/bubble/bubbles_st_num_rot.pdf"
+    in_fn = "test/fixtures/qr/bubbles_st_num_rot.pdf"
     doc = fitz.open(in_fn)
     
     

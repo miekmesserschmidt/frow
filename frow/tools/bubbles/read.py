@@ -36,9 +36,9 @@ class BubbleReader:
 
         self.bubbles_json = json.loads(self.qr_data.data)
 
-        self.scale = self.bubbles_json["scale"]
-        self.grid_w = self.bubbles_json["grid_w"]
-        self.grid_h = self.bubbles_json["grid_h"]
+        self.scale = self.bubbles_json["qr_span"]
+        self.array_postition = self.bubbles_json["array_position"]
+        self.grid_w, self.grid_h = self.bubbles_json["grid_shape"]
         self.block_size = block_size
 
         self._cropped_bubble_array = None
@@ -46,6 +46,19 @@ class BubbleReader:
     @property
     def qr_coords(self):
         return order_points(np.array(self.qr_data.polygon))
+
+    @property
+    def array_origin(self):
+        tl, tr, br, bl = self.qr_coords
+        xu, yu = self.unit_vectors
+        if self.array_postition == "right":
+            return tr 
+        elif self.array_postition == "left":
+            return tl - (xu * self.grid_w) 
+        elif self.array_postition == "up":
+            return tl - (yu * self.grid_h) 
+        elif self.array_postition == "down":
+            return bl 
 
     @property
     def cropped_bubble_array(self) -> Image:
@@ -70,20 +83,19 @@ class BubbleReader:
     @property
     def unit_vectors(self):
         tl, tr, br, bl = self.qr_coords
-        y_unit = (np.array(tl) - np.array(bl)) / self.scale
-        x_unit = (np.array(br) - np.array(bl)) / self.scale
+        x_unit = ((tr - tl)  / self.scale) 
+        y_unit = ((bl - tl)  / self.scale) 
         return x_unit, y_unit
 
     @property
     def source_quad(self):
         xu, yu = self.unit_vectors
+        array_origin = self.array_origin
 
-        qr_topleft, tr, br, bl = self.qr_coords
-
-        bottom_left = qr_topleft
-        top_left = qr_topleft + (self.grid_h) * yu
-        top_right = qr_topleft + (self.grid_w) * xu + (self.grid_h) * yu
-        bottom_right = qr_topleft + (self.grid_w) * xu
+        top_left = array_origin
+        top_right = array_origin + self.grid_w*xu
+        bottom_left = array_origin + self.grid_h*yu
+        bottom_right = array_origin + self.grid_w*xu + self.grid_h*yu
 
         return top_left, bottom_left, bottom_right, top_right
 
