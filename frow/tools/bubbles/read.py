@@ -3,7 +3,7 @@ import numpy as np
 import fitz
 import io
 from pyzbar.pyzbar import decode
-from PIL import Image
+from PIL import Image, ImageFilter, ImageEnhance, ImageOps
 import json
 import cv2
 
@@ -24,8 +24,49 @@ def order_points(pts):
     return rect
 
 
+def default_block_activation(pil_image):
+    width, height = pil_image.size
+
+    hist = pil_image.histogram()
+    low = hist[0:128]
+    return sum(low) / (width * height)
+
+
+def default_block_preprocessor(pil_image):
+    width, height = pil_image.size
+
+    
+    blur_radius = width*.06
+    contrast_enhance_level = 15
+    brighten_enhance_level = 1.6
+
+    b = pil_image.convert("L")
+    
+    b = pil_image.filter(ImageFilter.GaussianBlur(blur_radius))
+    b = ImageEnhance.Contrast(b).enhance(contrast_enhance_level)
+    b = ImageEnhance.Brightness(b).enhance(brighten_enhance_level)
+    return b
+
+
+def default_array_preprocessor(pil_image):
+
+    b = pil_image.convert("L")
+
+    brighten_enhance_level = 1.2
+    b = ImageEnhance.Brightness(b).enhance(brighten_enhance_level)
+
+    return b
+
+
 class BubbleReader:
-    def __init__(self, pil_image, block_size=100):
+    def __init__(
+        self,
+        pil_image,
+        block_size=50,
+        array_preprocessor = default_array_preprocessor,
+        block_preprocessor = default_block_preprocessor,
+        block_activation_function=default_block_activation,
+    ):
         self.im = pil_image
         qr_list = decode(pil_image)
         if len(qr_list) > 1:
@@ -41,6 +82,11 @@ class BubbleReader:
         self.grid_w, self.grid_h = self.bubbles_json["grid_shape"]
         self.block_size = block_size
 
+        self.array_preprocessor = array_preprocessor
+        self.block_preprocessor = block_preprocessor
+        self.block_activation_function = block_activation_function
+
+
         self._cropped_bubble_array = None
 
     @property
@@ -52,13 +98,13 @@ class BubbleReader:
         tl, tr, br, bl = self.qr_coords
         xu, yu = self.unit_vectors
         if self.array_postition == "right":
-            return tr 
+            return tr
         elif self.array_postition == "left":
-            return tl - (xu * self.grid_w) 
+            return tl - (xu * self.grid_w)
         elif self.array_postition == "up":
-            return tl - (yu * self.grid_h) 
+            return tl - (yu * self.grid_h)
         elif self.array_postition == "down":
-            return bl 
+            return bl
 
     @property
     def cropped_bubble_array(self) -> Image:
@@ -77,14 +123,23 @@ class BubbleReader:
         im_arr = np.array(self.im)
         M = cv2.getPerspectiveTransform(source, dest)
         warp = cv2.warpPerspective(im_arr, M, (dest_w, dest_h))
-        self._cropped_bubble_array = Image.fromarray(warp)
+        self._cropped_bubble_array = self.array_preprocessor(Image.fromarray(warp))
         return self._cropped_bubble_array
+
+    @property
+    def block_processed_bubble_array(self):
+        out = self.cropped_bubble_array.copy()
+        for x, y in itertools.product(range(self.grid_w), range(self.grid_h)):
+            out.paste(self.crop_block(x,y), (x*self.block_size, y*self.block_size))
+
+        return out
+
 
     @property
     def unit_vectors(self):
         tl, tr, br, bl = self.qr_coords
-        x_unit = ((tr - tl)  / self.scale) 
-        y_unit = ((bl - tl)  / self.scale) 
+        x_unit = (tr - tl) / self.scale
+        y_unit = (bl - tl) / self.scale
         return x_unit, y_unit
 
     @property
@@ -93,9 +148,9 @@ class BubbleReader:
         array_origin = self.array_origin
 
         top_left = array_origin
-        top_right = array_origin + self.grid_w*xu
-        bottom_left = array_origin + self.grid_h*yu
-        bottom_right = array_origin + self.grid_w*xu + self.grid_h*yu
+        top_right = array_origin + self.grid_w * xu
+        bottom_left = array_origin + self.grid_h * yu
+        bottom_right = array_origin + self.grid_w * xu + self.grid_h * yu
 
         return top_left, bottom_left, bottom_right, top_right
 
@@ -107,13 +162,13 @@ class BubbleReader:
             (x + 1) * self.block_size - shave,
             (y + 1) * self.block_size - shave,
         )  # l,t,r,b
-        return self.cropped_bubble_array.crop(r)
+        b = self.cropped_bubble_array.crop(r)
+        return self.block_preprocessor(b)
+
 
     def block_val(self, x, y):
-        b = self.crop_block(x, y).convert("L")
-        hist = b.histogram()
-        low = hist[0:128]
-        return sum(low) / self.block_size ** 2
+        b = self.crop_block(x, y)
+        return self.block_activation_function(b)
 
     @property
     def block_activations(self):
@@ -123,7 +178,13 @@ class BubbleReader:
 
         return mat
 
+
     @property
-    def bubble_matrix(self, threshold=0.02):
+    def normalized_block_activations(self):
+        return self.block_activations / np.max(self.block_activations)
+
+
+    def bubble_matrix(self, threshold=.1):
+
         return self.block_activations >= threshold
 

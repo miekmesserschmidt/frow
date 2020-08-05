@@ -1,0 +1,36 @@
+InfoBegin
+InfoKey: Creator
+InfoValue: Simple Scan 3.28.0
+PdfID0: e6f3064752b51fc89083254ad11bf408
+PdfID1: e6f3064752b51fc89083254ad11bf408
+NumberOfPages: 6
+PageMediaBegin
+PageMediaNumber: 1
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
+PageMediaBegin
+PageMediaNumber: 2
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
+PageMediaBegin
+PageMediaNumber: 3
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
+PageMediaBegin
+PageMediaNumber: 4
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
+PageMediaBegin
+PageMediaNumber: 5
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
+PageMediaBegin
+PageMediaNumber: 6
+PageMediaRotation: 0
+PageMediaRect: 0 0 595.2 841.68
+PageMediaDimensions: 595.2 841.68
