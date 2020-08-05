@@ -73,8 +73,8 @@ real_expected2 = np.array([
 ])
 
 @pytest.mark.parametrize("fn,expected,zoom", [
-    (os.path.join(fixture_path, "d.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "a.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "d.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "b.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "c.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "e.pdf"), st_expected, 2),
@@ -87,7 +87,10 @@ real_expected2 = np.array([
     (os.path.join(fixture_path, "real_pg_0005.pdf"), real_expected2, 4),
     (os.path.join(fixture_path, "real_pg_0006.pdf"), real_expected2, 3),
 
-    # (os.path.join(fixture_path, "real_photo.pdf"), real_expected2, 3),
+    (os.path.join(fixture_path, "real_photo.pdf"), real_expected2, 3),
+    
+    # (os.path.join(fixture_path, "shadowed.pdf"), real_expected2, 3),
+    # (os.path.join(fixture_path, "real_dirty.pdf"), real_expected2, 3),
 
 ])
 def test_bubble_matrix(fn, expected, zoom):
@@ -101,14 +104,17 @@ def test_bubble_matrix(fn, expected, zoom):
 
     # br.cropped_bubble_array.show()
 
-    print(br.block_activations)
-    print("std dev", np.std(br.block_activations))
-    print(br.bubble_matrix())
+    br.block_processed_bubble_array.show()
+    # br.cropped_bubble_array.show()
+
+
+    print("\n", br.block_activations)
+    print("\n", np.argmax(br.block_activations, axis=0))
+
     # print("median ", np.median(br.block_activations))
     # print("mean ",np.mean(br.block_activations))
     # print("max ",np.max(br.block_activations))
     # print("min ",np.min(br.block_activations))
-    br.block_processed_bubble_array.show()
     assert (br.bubble_matrix() == expected).all()
     
 

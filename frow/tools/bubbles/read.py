@@ -33,18 +33,7 @@ def default_block_activation(pil_image):
 
 
 def default_block_preprocessor(pil_image):
-    width, height = pil_image.size
-
-    
-    blur_radius = width*.06
-    contrast_enhance_level = 15
-    brighten_enhance_level = 1.6
-
-    b = pil_image.convert("L")
-    
-    b = pil_image.filter(ImageFilter.GaussianBlur(blur_radius))
-    b = ImageEnhance.Contrast(b).enhance(contrast_enhance_level)
-    b = ImageEnhance.Brightness(b).enhance(brighten_enhance_level)
+    b=pil_image
     return b
 
 
@@ -52,8 +41,23 @@ def default_array_preprocessor(pil_image):
 
     b = pil_image.convert("L")
 
-    brighten_enhance_level = 1.2
+    arr = np.array(b, dtype=np.int32)
+    m = np.mean(arr)
+
+    mask_dark = arr < 32
+    arr[mask_dark] = 0 # Make dark pixels black
+    arr = (arr /m) * 255 # Put the mean at white
+
+    arr = np.minimum(arr, 255)
+    b = Image.fromarray(arr.astype(np.uint8))
+
+    blur_radius = .6
+    contrast_enhance_level = 6
+    brighten_enhance_level = 1.3
+    
+    b = b.filter(ImageFilter.GaussianBlur(blur_radius))
     b = ImageEnhance.Brightness(b).enhance(brighten_enhance_level)
+    b = ImageEnhance.Contrast(b).enhance(contrast_enhance_level)
 
     return b
 
@@ -116,7 +120,7 @@ class BubbleReader:
 
         source = np.array(self.source_quad, dtype="float32")
         dest = np.array(
-            [[0, 0], [0, dest_h - 1], [dest_w - 1, dest_h - 1], [dest_w - 1, 0],],
+            [[0, 0], [0, dest_h], [dest_w , dest_h ], [dest_w, 0],],
             dtype="float32",
         )
 
@@ -184,7 +188,7 @@ class BubbleReader:
         return self.block_activations / np.max(self.block_activations)
 
 
-    def bubble_matrix(self, threshold=.1):
+    def bubble_matrix(self, threshold=.05):
 
         return self.block_activations >= threshold
 
