@@ -8,7 +8,6 @@ import json
 import cv2
 
 
-
 def default_block_activation(pil_image):
     width, height = pil_image.size
 
@@ -18,7 +17,7 @@ def default_block_activation(pil_image):
 
 
 def default_block_preprocessor(pil_image):
-    b=pil_image
+    b = pil_image
     return b
 
 
@@ -30,16 +29,16 @@ def default_array_preprocessor(pil_image):
     m = np.mean(arr)
 
     mask_dark = arr < 32
-    arr[mask_dark] = 0 # Make dark pixels black
-    arr = (arr /m) * 255 # Put the mean at white
+    arr[mask_dark] = 0  # Make dark pixels black
+    arr = (arr / m) * 255  # Put the mean at white
 
     arr = np.minimum(arr, 255)
     b = Image.fromarray(arr.astype(np.uint8))
 
-    blur_radius = .6
+    blur_radius = 0.6
     contrast_enhance_level = 6
     brighten_enhance_level = 1.3
-    
+
     b = b.filter(ImageFilter.GaussianBlur(blur_radius))
     b = ImageEnhance.Brightness(b).enhance(brighten_enhance_level)
     b = ImageEnhance.Contrast(b).enhance(contrast_enhance_level)
@@ -68,8 +67,8 @@ class BubbleReader:
         self,
         pil_image,
         block_size=50,
-        array_preprocessor = default_array_preprocessor,
-        block_preprocessor = default_block_preprocessor,
+        array_preprocessor=default_array_preprocessor,
+        block_preprocessor=default_block_preprocessor,
         block_activation_function=default_block_activation,
     ):
         self.im = pil_image
@@ -90,7 +89,6 @@ class BubbleReader:
         self.array_preprocessor = array_preprocessor
         self.block_preprocessor = block_preprocessor
         self.block_activation_function = block_activation_function
-
 
         self._cropped_bubble_array = None
 
@@ -121,8 +119,7 @@ class BubbleReader:
 
         source = np.array(self.source_quad, dtype="float32")
         dest = np.array(
-            [[0, 0], [0, dest_h], [dest_w , dest_h ], [dest_w, 0],],
-            dtype="float32",
+            [[0, 0], [0, dest_h], [dest_w, dest_h], [dest_w, 0],], dtype="float32",
         )
 
         im_arr = np.array(self.im)
@@ -135,10 +132,9 @@ class BubbleReader:
     def block_processed_bubble_array(self):
         out = self.cropped_bubble_array.copy()
         for x, y in itertools.product(range(self.grid_w), range(self.grid_h)):
-            out.paste(self.crop_block(x,y), (x*self.block_size, y*self.block_size))
+            out.paste(self.crop_block(x, y), (x * self.block_size, y * self.block_size))
 
         return out
-
 
     @property
     def unit_vectors(self):
@@ -170,7 +166,6 @@ class BubbleReader:
         b = self.cropped_bubble_array.crop(r)
         return self.block_preprocessor(b)
 
-
     def block_val(self, x, y):
         b = self.crop_block(x, y)
         return self.block_activation_function(b)
@@ -183,13 +178,35 @@ class BubbleReader:
 
         return mat
 
-
     @property
     def normalized_block_activations(self):
         return self.block_activations / np.max(self.block_activations)
 
-
-    def bubble_matrix(self, threshold=.05):
+    def bubble_matrix(self, threshold=0.05):
 
         return self.block_activations >= threshold
+
+
+class BubbleReaderFactory:
+    def __init__(
+        self,
+        block_size=50,
+        array_preprocessor=default_array_preprocessor,
+        block_preprocessor=default_block_preprocessor,
+        block_activation_function=default_block_activation,
+    ):
+        self.block_size = block_size
+        self.array_preprocessor = array_preprocessor
+        self.block_preprocessor = block_preprocessor
+        self.block_activation_function = block_activation_function
+
+    def build_bubblereader(self, im):
+        reader = BubbleReader(
+            im, 
+            block_size=self.block_size, 
+            array_preprocessor=self.array_preprocessor,
+            block_preprocessor=self.block_preprocessor,
+            block_activation_function=self.block_activation_function,            
+        )
+        return reader
 

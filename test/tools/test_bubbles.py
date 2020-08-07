@@ -28,7 +28,7 @@ def test_cropped_bubble_array(tmp_path, fn, ):
 
     br = bubbles.BubbleReader(im)
 
-    # br.cropped_bubble_array.show()
+    br.cropped_bubble_array
     
 
 
@@ -106,7 +106,6 @@ def test_bubble_matrix(fn, expected, zoom):
     # br.block_processed_bubble_array.show()
     # br.cropped_bubble_array.show()
 
-
     print("\n", br.block_activations)
     print("\n", np.argmax(br.block_activations, axis=0))
 
@@ -116,3 +115,41 @@ def test_bubble_matrix(fn, expected, zoom):
     # print("min ",np.min(br.block_activations))
     assert (br.bubble_matrix() == expected).all()
     
+
+
+L = [
+    (os.path.join(fixture_path, "a.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "d.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "b.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "c.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "e.pdf"), st_expected, 2),
+    (os.path.join(fixture_path, "f.pdf"), st_expected, 5),
+
+    # (os.path.join(fixture_path, "real_pg_0001.pdf"), real_expected1, 4),
+    # (os.path.join(fixture_path, "real_pg_0002.pdf"), real_expected2, 4),
+    # (os.path.join(fixture_path, "real_pg_0003.pdf"), real_expected2, 4),
+    # (os.path.join(fixture_path, "real_pg_0004.pdf"), real_expected2, 4),
+    # (os.path.join(fixture_path, "real_pg_0005.pdf"), real_expected2, 4),
+    # (os.path.join(fixture_path, "real_pg_0006.pdf"), real_expected2, 3),
+
+    # (os.path.join(fixture_path, "real_photo.pdf"), real_expected2, 3),
+    
+
+]
+def test_bubble_reader_factory():
+        
+    factory = bubbles.BubbleReaderFactory()
+    
+    for fn, expected, zoom in L:
+        
+
+        doc = fitz.open(fn)
+        matrix = fitz.Matrix(zoom, zoom)
+        data = doc[0].getPixmap(matrix=matrix).getImageData()
+        im = Image.open(io.BytesIO(data))
+
+        br = factory.build_bubblereader(im)
+
+        assert (br.bubble_matrix() == expected).all()
+    
+
