@@ -6,7 +6,10 @@ from . import box, qr
 def default_activation(qr_codes):
     return len(qr_codes) > 0
 
-def orientation_vector_from_qr(fitz_page, relative_window = None, abs_window=None, activation=default_activation):
+
+def orientation_vector_from_qr(
+    fitz_page, relative_window=None, abs_window=None, activation=default_activation
+):
     """
     Determines the orientation of a page by detecting qr_codes
 
@@ -14,7 +17,9 @@ def orientation_vector_from_qr(fitz_page, relative_window = None, abs_window=Non
         fitz_page : a fitz page
         relative_window : a 4-tuple in relative coordinates e.g., (0,0,0.5.,0.5). 
                             The page corners will be cropped into four images of this size.
-        activation : a function that takes a list of detected qr_codes, and returns some activation value (prefarably true or false)
+        abs_window : a 4-tuple in absolute coordinates e.g., (0,0,0.5.,0.5).  (One of relative_window and abs_window but not both must be not None)
+                            The page corners will be cropped into four images of this size. (One of relative_window and abs_window but not both must be not None)
+        activation : a function that takes a list of detected qr_codes from the window translated to the corners of the pages, and returns some activation value (prefarably true or false)
 
     Returns:
         np.array: the activation for the four corners in the order (top_left, top_right, bottom_right, bottom_left)
@@ -23,26 +28,25 @@ def orientation_vector_from_qr(fitz_page, relative_window = None, abs_window=Non
     abs_window = box.ensure_absolute_box(relative_window, abs_window, fitz_page.rect)
 
     # abs_window = box.absolute_box(relative_window, fitz_page.rect)
-    window_w =  abs_window[2]-abs_window[0]
-    window_h = abs_window[3]-abs_window[1]
+    window_w = abs_window[2] - abs_window[0]
+    window_h = abs_window[3] - abs_window[1]
 
     page_rect = np.array(fitz_page.rect)
     w = page_rect[2] - page_rect[0]
     h = page_rect[3] - page_rect[1]
 
-    tl_offset = np.array([0,0]*2)
-    tr_offset = np.array([w-window_w,0]*2)
+    tl_offset = np.array([0, 0] * 2)
+    tr_offset = np.array([w - window_w, 0] * 2)
 
-    bl_offset = np.array([0,h-window_h]*2)
-    br_offset = np.array([w-window_w,h-window_h]*2)
-
+    bl_offset = np.array([0, h - window_h] * 2)
+    br_offset = np.array([w - window_w, h - window_h] * 2)
 
     abs_window_tl = tl_offset + abs_window
     abs_window_tr = tr_offset + abs_window
     abs_window_bl = bl_offset + abs_window
     abs_window_br = br_offset + abs_window
-    
-    windows = [abs_window_tl,abs_window_tr,abs_window_br,abs_window_bl]
+
+    windows = [abs_window_tl, abs_window_tr, abs_window_br, abs_window_bl]
 
     tl_activation = tuple(
         activation(qr.grab_qr_codes(fitz_page, abs_window_rect=win, zoom=4))
@@ -70,6 +74,5 @@ def orient_page(fitz_page, orientation_vector, correct_orientation_vector):
     correct_orientation_index = np.argmax(correct_orientation_vector)
 
     rotation_factor = int(orientation_index - correct_orientation_index)
-    rot = int(-rotation_factor*90 % 360)
+    rot = int(-rotation_factor * 90 % 360)
     fitz_page.setRotation(rot)
-    
