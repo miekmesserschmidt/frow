@@ -103,8 +103,7 @@ def test_bubble_matrix(fn, expected, zoom):
     br = bubbles.BubbleReader(im)
 
     # br.cropped_bubble_array.show()
-
-    br.block_processed_bubble_array.show()
+    # br.block_processed_bubble_array.show()
     # br.cropped_bubble_array.show()
 
 
@@ -116,9 +115,4 @@ def test_bubble_matrix(fn, expected, zoom):
     # print("max ",np.max(br.block_activations))
     # print("min ",np.min(br.block_activations))
     assert (br.bubble_matrix() == expected).all()
-    
-
-    
-    
-    
     
