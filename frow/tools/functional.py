@@ -1,7 +1,7 @@
 import functional.pipeline
 import functools
 import itertools
-
+import more_itertools
 
 @functional.pipeline.extend()
 def zip_map(it, func):
@@ -13,6 +13,21 @@ def zip_map(it, func):
 def zip_starmap(it, func):
     it0, it1 = itertools.tee(it, 2)
     return zip(it0, itertools.starmap(func, it1))
+
+
+@functional.pipeline.extend()
+def star_for_each(it, func):
+    it0, it1 = itertools.tee(it, 2)
+    for i in it1:
+        func(*i)
+    return it0
+
+
+
+@functional.pipeline.extend()
+def distribute(it, n):
+    return more_itertools.distribute(n, it)
+
 
 
 @functional.pipeline.extend()

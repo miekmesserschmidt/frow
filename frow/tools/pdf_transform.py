@@ -1,9 +1,10 @@
+import io
 import numpy as np
 import os
 import shutil
 import fitz
 from . import inspect, decorators, file_transform, box
-
+from PIL import Image
 
 A4 = np.array((0, 0, 595, 842))
 
@@ -75,7 +76,33 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
     return fitz_page
 
 
-import io
+def paste_pdf_on_every_page(
+    fitz_doc, source, relative_rect=None, absolute_rect=None, **kwargs
+):
+
+    """Pastes a source document onto the given fitz page.
+
+
+    Args:
+        fitz_doc : doc to paste on
+        source : document to paste from
+        relative_rect : relative rect to paste into (one of relative_rect and absolute_rect must be None)
+        absolute_rect : absolute rect to paste into (one of relative_rect and absolute_rect must be None)
+        kwargs : passed to fitz_page.showPDFpage (look up options)
+
+    Returns:
+        fitz_page
+    """
+    for p in fitz_doc.pages():
+        paste_pdf_on(
+            p,
+            source,
+            relative_rect=relative_rect,
+            absolute_rect=absolute_rect,
+            **kwargs
+        )
+
+    return fitz_doc
 
 
 def svg_plonk(fitz_doc):
@@ -104,3 +131,23 @@ def svg_plonk(fitz_doc):
 
     return d
 
+
+def crop_to_pillow_image(
+    fitz_page,
+    relative_rect=None,
+    absolute_rect=None,
+    zoom=1,
+):
+    absolute_rect = box.ensure_absolute_box(
+        relative_rect, absolute_rect, fitz_page.rect
+    )
+
+    matrix = fitz.Matrix(zoom, zoom)
+    orig_crop_box = fitz_page.CropBox
+    
+    fitz_page.setCropBox(absolute_rect)
+    data = fitz_page.getPixmap(matrix=matrix).getImageData()
+    fitz_page.setCropBox(orig_crop_box)
+
+    im = Image.open(io.BytesIO(data))
+    return im

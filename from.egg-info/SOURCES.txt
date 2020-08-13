@@ -1,0 +1,8 @@
+setup.py
+from.egg-info/PKG-INFO
+from.egg-info/SOURCES.txt
+from.egg-info/dependency_links.txt
+from.egg-info/requires.txt
+from.egg-info/top_level.txt
+test/test_reflow_and_add_score_svg_example.py
+test/test_structure_example.py

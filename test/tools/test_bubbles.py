@@ -117,7 +117,7 @@ def test_bubble_matrix(fn, expected, zoom):
     
 
 
-L = [
+@pytest.mark.parametrize("fn,expected,zoom", [
     (os.path.join(fixture_path, "a.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "d.pdf"), st_expected, 2),
     (os.path.join(fixture_path, "b.pdf"), st_expected, 2),
@@ -135,21 +135,44 @@ L = [
     # (os.path.join(fixture_path, "real_photo.pdf"), real_expected2, 3),
     
 
-]
-def test_bubble_reader_factory():
+])
+def test_bubble_reader_factory(fn,expected,zoom):
         
     factory = bubbles.BubbleReaderFactory()
     
-    for fn, expected, zoom in L:
-        
 
-        doc = fitz.open(fn)
-        matrix = fitz.Matrix(zoom, zoom)
-        data = doc[0].getPixmap(matrix=matrix).getImageData()
-        im = Image.open(io.BytesIO(data))
+    doc = fitz.open(fn)
+    matrix = fitz.Matrix(zoom, zoom)
+    data = doc[0].getPixmap(matrix=matrix).getImageData()
+    im = Image.open(io.BytesIO(data))
 
-        br = factory.build_bubblereader(im)
+    br = factory.build_bubblereader(im)
 
-        assert (br.bubble_matrix() == expected).all()
+    assert (br.bubble_matrix() == expected).all()
     
+
+
+
+
+@pytest.mark.parametrize("fn,expected,zoom", [
+    
+    (os.path.join(fixture_path, "real_pg_0001.pdf"), real_expected1, 2),
+    (os.path.join(fixture_path, "real_pg_0002.pdf"), real_expected2, 2),
+    (os.path.join(fixture_path, "real_pg_0003.pdf"), real_expected2, 2),
+    (os.path.join(fixture_path, "real_pg_0004.pdf"), real_expected2, 2),
+    (os.path.join(fixture_path, "real_pg_0005.pdf"), real_expected2, 2),
+    (os.path.join(fixture_path, "real_pg_0006.pdf"), real_expected2, 2),
+    
+
+])
+def test_easy(fn, expected, zoom):
+        
+    factory = bubbles.BubbleReaderFactory()
+
+    doc = fitz.open(fn)
+    rel_rect = (0,0,.5,.5)
+   
+    arr = bubbles.easy.read(doc[0], relative_rect=rel_rect, zoom=zoom)
+    assert (arr == expected).all()
+
 

@@ -33,3 +33,15 @@ def test_pdf_paste_on(tmp_path):
 
     # subprocess.call(["xdg-open", out])
 
+
+def test_crop_to_pillow_image(tmp_path):
+
+    fn = os.path.join("test/fixtures/sub_folder_merge", "a", "0.pdf")
+
+    doc = fitz.open(fn)
+    
+    rel_rect = (0,0,.5,.5)
+
+    im = pdf_transform.crop_to_pillow_image(doc[0], relative_rect=rel_rect, zoom=2)
+    # im.show()
+
