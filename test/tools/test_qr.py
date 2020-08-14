@@ -42,8 +42,8 @@ def test_grab_qr_codes_rel(tmp_path, ):
     bottom_left = (0,.5,.5,1)
     bottom_right = (.5,.5,1,1)
     
-    bl_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_left)
-    br_qr = qr.grab_qr_codes(doc[0], relative_window_rect=bottom_right)
+    bl_qr = qr.grab_qr_codes(doc[0], relative_rect=bottom_left)
+    br_qr = qr.grab_qr_codes(doc[0], relative_rect=bottom_right)
     whole = qr.grab_qr_codes(doc[0])
 
     assert len(bl_qr) == 1
@@ -63,8 +63,8 @@ def test_grab_qr_codes_abs(tmp_path, ):
     bottom_left = box.absolute_box((0,.5,.5,1), doc[0].rect)
     bottom_right = box.absolute_box((.5,.5,1,1), doc[0].rect)
     
-    bl_qr = qr.grab_qr_codes(doc[0], abs_window_rect=bottom_left)
-    br_qr = qr.grab_qr_codes(doc[0], abs_window_rect=bottom_right)
+    bl_qr = qr.grab_qr_codes(doc[0], absolute_rect=bottom_left)
+    br_qr = qr.grab_qr_codes(doc[0], absolute_rect=bottom_right)
     whole = qr.grab_qr_codes(doc[0])
 
     assert len(bl_qr) == 1

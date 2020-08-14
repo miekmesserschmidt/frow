@@ -46,7 +46,7 @@ def qr_pdf(
     return doc
 
 
-def grab_qr_codes(fitz_page, relative_window_rect=None, abs_window_rect=None, zoom=2):
+def grab_qr_codes(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
     """Decodes all qr codes in the given rectangle and returns the decoded data.
 
     Args:
@@ -60,8 +60,8 @@ def grab_qr_codes(fitz_page, relative_window_rect=None, abs_window_rect=None, zo
     """
     im = pdf_transform.crop_to_pillow_image(
         fitz_page,
-        relative_rect=relative_window_rect,
-        absolute_rect=abs_window_rect,
+        relative_rect=relative_rect,
+        absolute_rect=absolute_rect,
         zoom=zoom,
     )
     qr_codes = decode(im)

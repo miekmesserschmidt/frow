@@ -151,3 +151,19 @@ def crop_to_pillow_image(
 
     im = Image.open(io.BytesIO(data))
     return im
+
+
+def doc_from_pages(pages):
+    doc = fitz.open()
+    for p in pages:
+        *_, w,h =p.rect
+        new_page = doc.newPage(width = w, height = h)
+        paste_pdf_on(
+            new_page,
+            p.parent,
+            absolute_rect=p.rect,
+            pno = p.number
+        )
+
+    return doc
+    
