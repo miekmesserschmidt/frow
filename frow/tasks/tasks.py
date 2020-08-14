@@ -15,7 +15,8 @@ def page_data(doc_id, page_index, total_pages):
 
 def add_page_id_marks(
     fitz_doc,
-    doc_id,
+    data_dict,
+    add_page_indices= True,
     relative_rect=None,
     absolute_rect=None,
     page_data_gen=page_data,
@@ -25,8 +26,17 @@ def add_page_id_marks(
     #TODO docstring
 
     for i, page in enumerate(fitz_doc.pages()):
-        data = page_data_gen(doc_id, i, total_pages=fitz_doc.pageCount)
-        qr_pdf = qr.qr_pdf(data, **qr_kwargs)
+        d = data_dict.copy()
+        d.update({
+            "type" : "id_mark",            
+        })
+        if add_page_indices:
+            d.update({
+                "page_index" : i,
+                "total_pages" : fitz_doc.pageCount,
+            })  
+        
+        qr_pdf = qr.qr_pdf(json.dumps(d), **qr_kwargs)
 
         pdf_transform.paste_pdf_on(
             page,
