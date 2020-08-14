@@ -1,5 +1,5 @@
 import pytest
-from frow.tools import functional as frow_func
+from frow.tools import pyfunctional as frow_func
 import functional
 
 
@@ -26,6 +26,20 @@ def test_starmap_with_args_kwargs():
 
     s = functional.seq([(1,2),(3,4)]).starmap_with_args_kwargs(f, -1, r=3)
     assert s == [5, 35]
+
+
+def test_starmap_for_each():
+    l = []
+    def f(a,b):
+        l.append(a)
+        
+    s = functional.seq([(1,2),(3,4)]).star_for_each(f).list()
+    assert l == [1,3]
+
+def test_distribute():
+
+    s = functional.seq(range(11)).distribute(2).map(list).list()
+    assert s == [[0, 2, 4, 6, 8, 10], [1,3,5,7,9]]
 
 
 def test_silent_errors():

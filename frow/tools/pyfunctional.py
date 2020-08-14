@@ -18,7 +18,7 @@ def zip_starmap(it, func):
 @functional.pipeline.extend()
 def star_for_each(it, func):
     it0, it1 = itertools.tee(it, 2)
-    for i in it1:
+    for i in it1:        
         func(*i)
     return it0
 
