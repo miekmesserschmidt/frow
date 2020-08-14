@@ -70,7 +70,7 @@ def test_by_id_mark(tmp_path, paste_pos):
     mark = qr.qr_pdf(json.dumps({"type" : "id_mark", "doc_id":"4444"}))
     pdf.paste_pdf_on(p, mark, relative_rect=paste_pos)
     
-    orientation.orient_by_id_mark(p, relative_window=(0,0,.5,.5))
+    orientation.orient_by_id_mark(p, relative_window=(0,0,.25,.25))
     
     outd = pdf.svg_plonk(doc)
     

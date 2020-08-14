@@ -1,4 +1,4 @@
-from .read import BubbleReaderFactory
+from .reader import BubbleReaderFactory
 from .. import box, pdf
 
 default_bubble_reader_factory = BubbleReaderFactory()

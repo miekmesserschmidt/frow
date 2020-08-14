@@ -1,2 +1,1 @@
-from .read import *
-from . import easy
+from .easy import read

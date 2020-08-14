@@ -5,8 +5,11 @@ import fitz
 import pytest
 import subprocess
 import os 
-from frow.tools import bubbles
 from PIL import Image
+from frow.tools.bubbles import read 
+from frow.tools.bubbles import reader
+# from frow.tools.bubbles import read as bubbles
+import frow.tools.bubbles as bubbles
 
 
 fixture_path = "test/fixtures/bubble"
@@ -26,7 +29,7 @@ def test_cropped_bubble_array(tmp_path, fn, ):
     data = doc[0].getPixmap(matrix=matrix).getImageData()
     im = Image.open(io.BytesIO(data))
 
-    br = bubbles.BubbleReader(im)
+    br = reader.BubbleReader(im)
 
     br.cropped_bubble_array
     
@@ -100,7 +103,7 @@ def test_bubble_matrix(fn, expected, zoom):
     data = doc[0].getPixmap(matrix=matrix).getImageData()
     im = Image.open(io.BytesIO(data))
 
-    br = bubbles.BubbleReader(im)
+    br = reader.BubbleReader(im)
 
     # br.cropped_bubble_array.show()
     # br.block_processed_bubble_array.show()
@@ -138,7 +141,7 @@ def test_bubble_matrix(fn, expected, zoom):
 ])
 def test_bubble_reader_factory(fn,expected,zoom):
         
-    factory = bubbles.BubbleReaderFactory()
+    factory = reader.BubbleReaderFactory()
     
 
     doc = fitz.open(fn)
@@ -167,12 +170,11 @@ def test_bubble_reader_factory(fn,expected,zoom):
 ])
 def test_easy(fn, expected, zoom):
         
-    factory = bubbles.BubbleReaderFactory()
 
     doc = fitz.open(fn)
     rel_rect = (0,0,.5,.5)
    
-    arr = bubbles.easy.read(doc[0], relative_rect=rel_rect, zoom=zoom)
+    arr = bubbles.read(doc[0], relative_rect=rel_rect, zoom=zoom)
     assert (arr == expected).all()
 
 
