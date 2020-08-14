@@ -1,16 +1,6 @@
 import json
-from ..tools import pdf_transform, qr, box
+from ..tools import pdf, qr, box
 
-
-def page_data(doc_id, page_index, total_pages):
-    return json.dumps(
-        {
-            "type": "page_id_mark",
-            "doc_id": doc_id,
-            "page_index": page_index,
-            "total_pages": total_pages,
-        }
-    )
 
 
 def add_page_id_marks(
@@ -19,7 +9,6 @@ def add_page_id_marks(
     add_page_indices= True,
     relative_rect=None,
     absolute_rect=None,
-    page_data_gen=page_data,
     qr_kwargs={},
     paste_kwargs={},
 ): 
@@ -38,7 +27,7 @@ def add_page_id_marks(
         
         qr_pdf = qr.qr_pdf(json.dumps(d), **qr_kwargs)
 
-        pdf_transform.paste_pdf_on(
+        pdf.paste_pdf_on(
             page,
             qr_pdf,
             relative_rect=relative_rect,

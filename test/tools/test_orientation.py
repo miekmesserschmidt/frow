@@ -1,7 +1,7 @@
 import subprocess
 import fitz
 import os, pytest
-from frow.tools import orientation, pdf_transform
+from frow.tools import orientation, pdf
 
 fixture_path = "test/fixtures/orientation"
 
@@ -39,7 +39,7 @@ def test_orient_page(tmp_path, fn):
     doc = fitz.open(fn)
     v = orientation.orientation_vector_from_qr(doc[0], relative_window=(0,0,.5,.5))
     orientation.orient_page(doc[0], v, correct_orientation)
-    doc = pdf_transform.svg_plonk(doc)
+    doc = pdf.svg_plonk(doc)
 
     oriented_fn = os.path.join(tmp_path, "oriented_fn.pdf")
     doc.save(oriented_fn)

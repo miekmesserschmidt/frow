@@ -8,7 +8,7 @@ from pyzbar.pyzbar import decode
 import numpy as np
 from PIL import Image
 
-from . import box, pdf_transform
+from . import box, pdf
 
 
 def qr_pdf(
@@ -60,7 +60,7 @@ def grab_qr_codes(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
     Returns:
         [list]: list of all the qr_codes detected
     """
-    im = pdf_transform.crop_to_pillow_image(
+    im = pdf.crop_to_pillow_image(
         fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom,
     )
     qr_codes = decode(im)

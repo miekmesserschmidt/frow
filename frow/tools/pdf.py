@@ -1,22 +1,20 @@
+from PIL import Image
 import io
 import numpy as np
 import os
 import shutil
 import fitz
-from . import inspect, decorators, file_transform, box
-from PIL import Image
+from . import inspect, box
+
 
 A4 = np.array((0, 0, 595, 842))
 
 
-@decorators.with_overwrite_toggle
 def refit_pdf(
-    source_fn,
-    dest_fn,
+    in_,
     relative_paste_rect=None,
     abs_paste_rect=None,
     border=True,
-    overwrite=True,
 ):
     """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit.
 
@@ -28,11 +26,11 @@ def refit_pdf(
         border : add a border. Defaults to True.
 
     Returns:
-        dest_fn
+        fitz_doc
     """
     abs_paste_rect = box.ensure_absolute_box(relative_paste_rect, abs_paste_rect, A4)
 
-    source_pdf = fitz.open(source_fn)
+    source_pdf = in_
 
     d = fitz.open()
 
@@ -46,11 +44,28 @@ def refit_pdf(
         if border:
             new_page.drawRect(abs_paste_rect, overlay=True)
 
-    path, _ = os.path.split(dest_fn)
-    file_transform.ensure_path(path)
+    return d 
 
-    d.save(dest_fn)
-    return dest_fn
+
+
+
+
+def merge_pdf(source_list, ):
+    b = fitz.open()
+    for a in source_list:        
+        b.insertPDF(a)
+
+    return b
+
+
+
+def open_ensuring_pdf(source_fn):
+    if inspect.is_pdf(source_fn):
+        return fitz.open(source_fn)
+    else:
+        s = fitz.open(source_fn)
+        d = fitz.open(stream=s.convertToPDF(), filetype="pdf")
+        return d
 
 
 def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kwargs):
@@ -74,6 +89,7 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
 
     fitz_page.showPDFpage(abs_paste_rect, source, **kwargs)
     return fitz_page
+
 
 
 def paste_pdf_on_every_page(
@@ -153,9 +169,9 @@ def crop_to_pillow_image(
     return im
 
 
-def doc_from_pages(pages):
+def doc_from_pages(fitz_pages):
     doc = fitz.open()
-    for p in pages:
+    for p in fitz_pages:
         *_, w,h =p.rect
         new_page = doc.newPage(width = w, height = h)
         paste_pdf_on(
