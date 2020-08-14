@@ -1,3 +1,5 @@
+import frozendict
+import json
 import io
 import qrcode
 import fitz
@@ -59,12 +61,24 @@ def grab_qr_codes(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
         [list]: list of all the qr_codes detected
     """
     im = pdf_transform.crop_to_pillow_image(
-        fitz_page,
-        relative_rect=relative_rect,
-        absolute_rect=absolute_rect,
-        zoom=zoom,
+        fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom,
     )
     qr_codes = decode(im)
 
     return qr_codes
+
+
+def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
+    codes = grab_qr_codes(
+        fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom
+    )
+    if not codes:
+        raise ValueError("No qr codes detected")
+    elif len(codes) > 1:
+        raise ValueError("Multiple qr-codes detected")
+
+    code = codes[0]    
+    s = code.data
+
+    return json.loads(s)
 

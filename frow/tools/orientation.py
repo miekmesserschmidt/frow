@@ -49,7 +49,7 @@ def orientation_vector_from_qr(
     windows = [abs_window_tl, abs_window_tr, abs_window_br, abs_window_bl]
 
     tl_activation = tuple(
-        activation(qr.grab_qr_codes(fitz_page, abs_window_rect=win, zoom=4))
+        activation(qr.grab_qr_codes(fitz_page, absolute_rect=win, zoom=4))
         for win in windows
     )
 

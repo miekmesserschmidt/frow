@@ -74,3 +74,26 @@ def test_grab_qr_codes_abs(tmp_path, ):
 
 
 
+
+@pytest.mark.parametrize("data", 
+    [
+        {"type" : "page_info", "doc_id" : "fa3ab3", "page_no" :"1"},
+        {"type" : "page_info", "doc_id" : "verylongdocidnospaces", "page_no" :"1"},
+    ]
+)
+def test_read_json_qr(tmp_path, data):
+    doc = qr.qr_pdf(json.dumps(data))
+    read_json = qr.read_json_qr(doc[0])
+    assert isinstance(read_json, dict)
+    assert read_json == data
+
+
+@pytest.mark.parametrize("data", [
+        '{"ttttttttt" : "1234", "r":"t"...',
+])
+def test_read_no_json_qr(tmp_path, data):
+    doc = qr.qr_pdf(data)
+    with pytest.raises(json.JSONDecodeError):
+        read_json = qr.read_json_qr(doc[0])
+        
+    
