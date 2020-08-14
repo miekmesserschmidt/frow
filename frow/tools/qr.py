@@ -80,5 +80,5 @@ def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
     code = codes[0]    
     s = code.data
 
-    return json.loads(s)
+    return frozendict.frozendict(json.loads(s))
 

@@ -84,7 +84,7 @@ def test_grab_qr_codes_abs(tmp_path, ):
 def test_read_json_qr(tmp_path, data):
     doc = qr.qr_pdf(json.dumps(data))
     read_json = qr.read_json_qr(doc[0])
-    assert isinstance(read_json, dict)
+    # assert isinstance(read_json, dict)
     assert read_json == data
 
 
