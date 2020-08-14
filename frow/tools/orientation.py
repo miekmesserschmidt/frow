@@ -8,7 +8,7 @@ def default_activation(qr_codes):
 
 
 def orientation_vector_from_qr(
-    fitz_page, relative_window=None, abs_window=None, activation=default_activation
+    fitz_page, relative_window=None, abs_window=None, activation=default_activation, zoom=4
 ):
     """
     Determines the orientation of a page by detecting qr_codes
@@ -49,7 +49,7 @@ def orientation_vector_from_qr(
     windows = [abs_window_tl, abs_window_tr, abs_window_br, abs_window_bl]
 
     tl_activation = tuple(
-        activation(qr.grab_qr_codes(fitz_page, absolute_rect=win, zoom=4))
+        activation(qr.grab_qr_codes(fitz_page, absolute_rect=win, zoom=zoom))
         for win in windows
     )
 
@@ -70,9 +70,35 @@ def orient_page(fitz_page, orientation_vector, correct_orientation_vector):
         correct_orientation_vector : the page's desired orientation vector, e.g., (True, False, False, False), meaning top_left should be activated.
     """
 
-    orientation_index = np.argmax(orientation_vector)
-    correct_orientation_index = np.argmax(correct_orientation_vector)
+    orientation_index = np.argmax(np.array(orientation_vector))
+    correct_orientation_index = np.argmax(np.array(correct_orientation_vector))
 
     rotation_factor = int(orientation_index - correct_orientation_index)
-    rot = int(-rotation_factor * 90 % 360)
+    
+    rot = int((-rotation_factor * 90) % 360)
     fitz_page.setRotation(rot)
+
+
+
+BOTTOM_LEFT = (0,0,0,1)
+BOTTOM_RIGHT = (0,0,1,0)
+TOP_LEFT = (1,0,0,0)
+TOP_RIGHT = (0,1,0,0)
+     
+def json_type_str_activation(qr_codes, type_str="id_mark"):
+    import json
+    for code in qr_codes:
+        try:
+            d = json.loads(code.data)
+        except json.JSONDecodeError:
+            pass
+        
+        if d.get("type") == type_str:
+            return True
+    else:
+        return False
+     
+def orient_by_id_mark(fitz_page, relative_window=None, abs_window=None, position=BOTTOM_LEFT, activation = json_type_str_activation, zoom=4):
+    orientation = orientation_vector_from_qr(fitz_page, relative_window=relative_window, abs_window=abs_window, activation=activation, zoom=zoom)
+    orient_page(fitz_page, orientation, correct_orientation_vector=position)    
+    

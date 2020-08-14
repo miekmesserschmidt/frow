@@ -1,5 +1,5 @@
 import pytest
-from frow.tools import pyfunctional as frow_func
+from frow.tools import pyfunctional_extensions as frow_func
 import functional
 
 

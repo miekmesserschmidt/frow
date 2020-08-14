@@ -11,10 +11,7 @@ A4 = np.array((0, 0, 595, 842))
 
 
 def refit_pdf(
-    in_,
-    relative_paste_rect=None,
-    abs_paste_rect=None,
-    border=True,
+    in_, relative_paste_rect=None, abs_paste_rect=None, border=True,
 ):
     """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit.
 
@@ -44,19 +41,15 @@ def refit_pdf(
         if border:
             new_page.drawRect(abs_paste_rect, overlay=True)
 
-    return d 
+    return d
 
 
-
-
-
-def merge_pdf(source_list, ):
+def merge_pdf(source_list,):
     b = fitz.open()
-    for a in source_list:        
+    for a in source_list:
         b.insertPDF(a)
 
     return b
-
 
 
 def open_ensuring_pdf(source_fn):
@@ -89,7 +82,6 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
 
     fitz_page.showPDFpage(abs_paste_rect, source, **kwargs)
     return fitz_page
-
 
 
 def paste_pdf_on_every_page(
@@ -149,10 +141,7 @@ def svg_plonk(fitz_doc):
 
 
 def crop_to_pillow_image(
-    fitz_page,
-    relative_rect=None,
-    absolute_rect=None,
-    zoom=1,
+    fitz_page, relative_rect=None, absolute_rect=None, zoom=1,
 ):
     absolute_rect = box.ensure_absolute_box(
         relative_rect, absolute_rect, fitz_page.rect
@@ -160,7 +149,7 @@ def crop_to_pillow_image(
 
     matrix = fitz.Matrix(zoom, zoom)
     orig_crop_box = fitz_page.CropBox
-    
+
     fitz_page.setCropBox(absolute_rect)
     data = fitz_page.getPixmap(matrix=matrix).getImageData()
     fitz_page.setCropBox(orig_crop_box)
@@ -172,14 +161,9 @@ def crop_to_pillow_image(
 def doc_from_pages(fitz_pages):
     doc = fitz.open()
     for p in fitz_pages:
-        *_, w,h =p.rect
-        new_page = doc.newPage(width = w, height = h)
-        paste_pdf_on(
-            new_page,
-            p.parent,
-            absolute_rect=p.rect,
-            pno = p.number
-        )
+        *_, w, h = p.rect
+        new_page = doc.newPage(width=w, height=h)
+        paste_pdf_on(new_page, p.parent, absolute_rect=p.rect, pno=p.number)
 
     return doc
-    
+
