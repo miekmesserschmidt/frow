@@ -22,9 +22,9 @@ def qr_pdf(
 
     Args:
         data ([str]): data to encoding into the qr code
-        dimensions (tuple, optional): Dimensions of the output. Defaults to (200, 100).
-        qr_relative_rect (tuple, optional): Where to place the qr_code in the pdf result. Defaults to (0.5, 0, 1, 1).
-        text_relative_rect (tuple, optional): Where to place the text in the pdf result. Defaults to (0, 0, 0.5, 1).
+        dimensions (2-tuple, optional): Dimensions of the output. Defaults to (200, 100).
+        qr_relative_rect (4-tuple, optional): Where to place the qr_code in the pdf result. Defaults to (0.5, 0, 1, 1).
+        text_relative_rect (4-tuple, optional): Where to place the text in the pdf result. Defaults to (0, 0, 0.5, 1).
         fontsize (int, optional): Font size of text. Defaults to 10.
 
     Returns:
@@ -69,6 +69,21 @@ def grab_qr_codes(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
 
 
 def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
+    """Reads a qr code encoding a json string
+
+    Args:
+        fitz_page ([fitz page]): page to grab the data from.
+        relative_rect ([4-tuple], optional): [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        absolute_rect ([4-tuple], optional): [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        zoom (float, optional): Zoom level. Defaults to 2.
+
+    Raises:
+        ValueError: If no qr codes are detected
+        ValueError: If multiple qr codes are detected
+
+    Returns:
+        [frozendict]: A frozendict from the read json string
+    """
     codes = grab_qr_codes(
         fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom
     )

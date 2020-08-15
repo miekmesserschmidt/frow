@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API reference &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Introduction" href="../prose/intro.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-frow.tools.qr">
+<span id="api-reference"></span><h1>API reference<a class="headerlink" href="#module-frow.tools.qr" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="frow.tools.qr.grab_qr_codes">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">grab_qr_codes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.grab_qr_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes all qr codes in the given rectangle and returns the decoded data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – page to grab the data from.</p></li>
+<li><p><strong>relative_window_rect</strong> (<em>4-tuple</em>) – Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>abs_window_rect</strong> (<em>4-tuple</em>) – Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>int</em><em>, </em><em>optional</em>) – zoom level for rasterization. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all the qr_codes detected</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[list]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.qr.qr_pdf">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">qr_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">200, 100</span></em>, <em class="sig-param"><span class="n">qr_relative_rect</span><span class="o">=</span><span class="default_value">0.5, 0, 1, 1</span></em>, <em class="sig-param"><span class="n">text_relative_rect</span><span class="o">=</span><span class="default_value">0, 0, 0.5, 1</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.qr_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a fitz pdf containing a qr_code and its data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>[</em><em>str</em><em>]</em>) – data to encoding into the qr code</p></li>
+<li><p><strong>dimensions</strong> (<em>2-tuple</em><em>, </em><em>optional</em>) – Dimensions of the output. Defaults to (200, 100).</p></li>
+<li><p><strong>qr_relative_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – Where to place the qr_code in the pdf result. Defaults to (0.5, 0, 1, 1).</p></li>
+<li><p><strong>text_relative_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – Where to place the text in the pdf result. Defaults to (0, 0, 0.5, 1).</p></li>
+<li><p><strong>fontsize</strong> (<em>int</em><em>, </em><em>optional</em>) – Font size of text. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resulting qr pdf.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz pdf]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.qr.read_json_qr">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">read_json_qr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.read_json_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a qr code encoding a json string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – page to grab the data from.</p></li>
+<li><p><strong>relative_rect</strong> (<em>[</em><em>4-tuple</em><em>]</em><em>, </em><em>optional</em>) – [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> (<em>[</em><em>4-tuple</em><em>]</em><em>, </em><em>optional</em>) – [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>float</em><em>, </em><em>optional</em>) – Zoom level. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If no qr codes are detected</p></li>
+<li><p><strong>ValueError</strong> – If multiple qr codes are detected</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A frozendict from the read json string</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[frozendict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../prose/intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../prose/intro.html" title="previous chapter">Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/api_ref.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
