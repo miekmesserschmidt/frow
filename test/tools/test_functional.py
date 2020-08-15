@@ -63,3 +63,13 @@ def test_silent_errors_key_intr():
     with pytest.raises(KeyboardInterrupt):
         s = functional.seq([1,2,3]).map_with_args_kwargs(f, r=3).silent_errors()
         assert s == [1,8]        
+        
+def test_with_progress():
+
+    def f(a):
+        import time
+        time.sleep(1)
+        return a
+        
+    s = functional.seq([1,2,3]).map(f).with_progress().list()
+    

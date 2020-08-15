@@ -1,7 +1,10 @@
+import multiprocessing
+import functional
 import functional.pipeline
 import functools
 import itertools
 import more_itertools
+import tqdm
 
 @functional.pipeline.extend()
 def zip_map(it, func):
@@ -17,7 +20,7 @@ def zip_starmap(it, func):
 
 @functional.pipeline.extend()
 def star_for_each(it, func):
-    it0, it1 = itertools.tee(it, 2)
+    it0, it1 = itertools.tee(it, 2)    
     for i in it1:        
         func(*i)
     return it0
@@ -59,3 +62,16 @@ def silent_errors(it, logger=None):
 
             print(e)
 
+
+@functional.pipeline.extend()
+def with_progress(it, total=None):    
+    for item in tqdm.tqdm(it, total=total):
+        yield item
+        
+@functional.pipeline.extend()
+def multiprocessing_map(it, func, pool_size=4, chunksize=128):
+    
+    with multiprocessing.Pool(pool_size) as p:
+        yield from p.imap(func, it, chunksize=chunksize)
+            
+    

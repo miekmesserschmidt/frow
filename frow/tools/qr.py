@@ -73,9 +73,9 @@ def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
         fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom
     )
     if not codes:
-        raise ValueError("No qr codes detected")
+        raise ValueError(f"No qr codes detected {fitz_page.parent} p.{fitz_page.number+1} (index {fitz_page.number})", fitz_page.parent, fitz_page)
     elif len(codes) > 1:
-        raise ValueError("Multiple qr-codes detected")
+        raise ValueError(f"Multiple qr-codes detected {fitz_page.parent} p.{fitz_page.number+1} (index {fitz_page.number})", fitz_page.parent, fitz_page)
 
     code = codes[0]    
     s = code.data

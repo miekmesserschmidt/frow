@@ -7,6 +7,7 @@ import fitz
 from . import inspect, box
 
 
+
 A4 = np.array((0, 0, 595, 842))
 
 
@@ -52,12 +53,12 @@ def merge_pdf(source_list,):
     return b
 
 
-def open_ensuring_pdf(source_fn):
+def open_ensuring_pdf(source_fn, constructor = fitz.open):
     if inspect.is_pdf(source_fn):
-        return fitz.open(source_fn)
+        return constructor(source_fn)
     else:
-        s = fitz.open(source_fn)
-        d = fitz.open(stream=s.convertToPDF(), filetype="pdf")
+        s = constructor(source_fn)
+        d = constructor(stream=s.convertToPDF(), filetype="pdf")
         return d
 
 
@@ -158,7 +159,7 @@ def crop_to_pillow_image(
     return im
 
 
-def doc_from_pages(fitz_pages):
+def doc_from_pages(fitz_pages,):
     doc = fitz.open()
     for p in fitz_pages:
         *_, w, h = p.rect
