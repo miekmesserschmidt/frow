@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frow.other &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="frow.tools.bubbles.easy" href="bubbles.html" />
+    <link rel="prev" title="frow" href="tools.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="frow-other">
+<h1>frow.other<a class="headerlink" href="#frow-other" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-frow.other.box">
+<span id="frow-other-box"></span><h2>frow.other.box<a class="headerlink" href="#module-frow.other.box" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-frow.other.multiprocess">
+<span id="frow-other-multiprocess"></span><h2>frow.other.multiprocess<a class="headerlink" href="#module-frow.other.multiprocess" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="frow.other.multiprocess.PickableFitzDoc">
+<em class="property">class </em><code class="sig-prename descclassname">frow.other.multiprocess.</code><code class="sig-name descname">PickableFitzDoc</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.multiprocess.PickableFitzDoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper that behaves like a fitz doc, but is picklable so can be used with multiprocessing.</p>
+<p>Pass it as constructor to frow.tools.pdf.open_ensuring_pdf.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="frow.other.multiprocess.PickableFitzPage">
+<em class="property">class </em><code class="sig-prename descclassname">frow.other.multiprocess.</code><code class="sig-name descname">PickableFitzPage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_args</span></em>, <em class="sig-param"><span class="n">doc_kwargs</span></em>, <em class="sig-param"><span class="n">page_index</span></em>, <em class="sig-param"><span class="n">doc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.multiprocess.PickableFitzPage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper that behaves like a fits page, but is picklable so can be used with multiprocessing.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-frow.other.pyfunctional_extensions">
+<span id="frow-other-pyfunctional-extensions"></span><h2>frow.other.pyfunctional_extensions<a class="headerlink" href="#module-frow.other.pyfunctional_extensions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.distribute">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">distribute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.distribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distributes the iterator evenly into n iterators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>n</strong> (<em>[</em><em>int</em><em>]</em>) – number of iterators to distribute into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>n-iterators that the iterator was distributed acoross</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.map_with_args_kwargs">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">map_with_args_kwargs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.map_with_args_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as map but passes args and kwargs down to the function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+<li><p><strong>`*args`</strong> – args to pass down to function</p></li>
+<li><p><strong>`**kargs`</strong> – kwargs to pass down to function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>equivalent to generator <code class="docutils literal notranslate"><span class="pre">`(func(a,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.multiprocessing_map">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">multiprocessing_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">pool_size</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.multiprocessing_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>[summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+<li><p><strong>pool_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of workers. Defaults to 4.</p></li>
+<li><p><strong>chunksize</strong> (<em>int</em><em>, </em><em>optional</em>) – Chunck size passed to workers. Defaults to 128.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>[type]</em> – equivalent to generator <code class="docutils literal notranslate"><span class="pre">`(func(a)</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.silent_errors">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">silent_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.silent_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prevents errors during iteration from stopping execution. Errors are caught and logged instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator which may raise exceptions</p></li>
+<li><p><strong>logger</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Logger to log to. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>[type]</em> – yields from the iterator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.star_for_each">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">star_for_each</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.star_for_each" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as for_each, but *-unpacks inputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>equivalent to generator expression <code class="docutils literal notranslate"><span class="pre">`(func(*a)</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.starmap_with_args_kwargs">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">starmap_with_args_kwargs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.starmap_with_args_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as starmap but passes args and kwargs down to the function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+<li><p><strong>`*args`</strong> – args to pass down to function</p></li>
+<li><p><strong>`**kargs`</strong> – kwargs to pass down to function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>equivalent to generator <code class="docutils literal notranslate"><span class="pre">`(func(*a,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.with_progress">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">with_progress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">total</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.with_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows for iteration with a tqdm progressbar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator</p></li>
+<li><p><strong>total</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Total number of items in the iterator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>[type]</em> – it</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.zip_map">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">zip_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.zip_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as map, but the result is a zip: (a, func(a))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>equivalent to generator expression <code class="docutils literal notranslate"><span class="pre">`((a,</span> <span class="pre">func(a))</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.other.pyfunctional_extensions.zip_starmap">
+<code class="sig-prename descclassname">frow.other.pyfunctional_extensions.</code><code class="sig-name descname">zip_starmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">it</span></em>, <em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.pyfunctional_extensions.zip_starmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as starmap, but the result is a zip: (a, func(*a))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>[</em><em>type</em><em>]</em>) – iterator to map on</p></li>
+<li><p><strong>func</strong> (<em>[</em><em>type</em><em>]</em>) – function to map</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>equivalent to generator expression <code class="docutils literal notranslate"><span class="pre">`((a,</span> <span class="pre">func(*a))</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">a</span> <span class="pre">in</span> <span class="pre">it)`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[iterator]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../prose/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">frow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">frow.other</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.other.box">frow.other.box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.other.multiprocess">frow.other.multiprocess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.other.pyfunctional_extensions">frow.other.pyfunctional_extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bubbles.html">frow.tools.bubbles.easy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bubbles.html#module-frow.tools.bubbles.make">frow.tools.bubbles.make</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bubbles.html#frow-tools-bubbles-reader">frow.tools.bubbles.reader</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tools.html" title="previous chapter">frow</a></li>
+      <li>Next: <a href="bubbles.html" title="next chapter">frow.tools.bubbles.easy</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/other.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

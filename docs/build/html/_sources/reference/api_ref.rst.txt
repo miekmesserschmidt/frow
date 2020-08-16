@@ -1,5 +1,10 @@
-API reference
+frow api reference
 ==============
 
-.. automodule:: frow.tools.qr
-    :members:
+.. toctree::
+   :maxdepth: 4
+   :caption: Contents:
+
+   tools
+   other
+   bubbles

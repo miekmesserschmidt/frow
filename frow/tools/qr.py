@@ -1,3 +1,6 @@
+"""
+Tools for reading and creating qr codes.
+"""
 import frozendict
 import json
 import io
@@ -8,7 +11,8 @@ from pyzbar.pyzbar import decode
 import numpy as np
 from PIL import Image
 
-from . import box, pdf
+from . import pdf
+from ..other import box
 
 
 def qr_pdf(

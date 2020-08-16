@@ -1,7 +1,10 @@
+"""
+Tools for detecting and correcting page orientations.
+"""
 import fitz
 import numpy as np
-from . import box, qr
-
+from . import qr
+from ..other import box
 
 def default_activation(qr_codes):
     return len(qr_codes) > 0
@@ -99,6 +102,18 @@ def json_type_str_activation(qr_codes, type_str="id_mark"):
         return False
      
 def orient_by_id_mark(fitz_page, relative_window=None, abs_window=None, position=BOTTOM_LEFT, activation = json_type_str_activation, zoom=4):
+    """Orients a page by detecting the position of the page_id_mark, and placing it in the specified position
+
+    Args:
+        fitz_page ([fitz.page]): Page to orient
+        relative_window : a 4-tuple in relative coordinates e.g., (0,0,0.5.,0.5). 
+                            The page corners will be cropped into four images of this size.
+        abs_window : a 4-tuple in absolute coordinates e.g., (0,0,0.5.,0.5).  (One of relative_window and abs_window but not both must be not None)
+                            The page corners will be cropped into four images of this size. (One of relative_window and abs_window but not both must be not None)
+        position (4-tuple): The postion where the page_id_mark should be when the page is oriented correctly. Defaults to BOTTOM_LEFT.
+        activation ([function], optional): Function that takes a list of detected qr_codes and returns True if a page_id_mark is among them.  Defaults to json_type_str_activation.
+        zoom (float, optional): Zoom level. Defaults to 4.
+    """
     orientation = orientation_vector_from_qr(fitz_page, relative_window=relative_window, abs_window=abs_window, activation=activation, zoom=zoom)
     orient_page(fitz_page, orientation, correct_orientation_vector=position)    
     

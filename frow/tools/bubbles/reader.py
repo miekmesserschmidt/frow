@@ -1,3 +1,9 @@
+"""
+The implementation details of the bubble array reader. 
+
+Users should use the frow.bubbles.easy.read function and provide a custom factory with activation and preporcessors.
+"""
+
 import itertools
 import numpy as np
 import fitz
@@ -63,6 +69,8 @@ def order_points(pts):
 
 
 class BubbleReader:
+    """A reader of bubble arrays. Useser should use the function read in frow.tools.bubbles
+    """
     def __init__(
         self,
         pil_image,
@@ -71,6 +79,20 @@ class BubbleReader:
         block_preprocessor=default_block_preprocessor,
         block_activation_function=default_block_activation,
     ):
+
+        """[summary]
+
+        Args:
+            pil_image ([PIL.Image]): Image containing the whole bubble array and the orientation qr code.
+            block_size (int, optional): [description]. Defaults to 50.
+            array_preprocessor ([function], optional): Function taking a pillow.Image and returns pillow.Image of same size. Applied to the whole bubble array image before detection begins.  Defaults to default_array_preprocessor.
+            block_preprocessor ([function], optional): Function taking a pillow.Image and returns pillow.Image of same size. Applied to each cropped cell in the bubble array before detection begins. Defaults to default_block_preprocessor.
+            block_activation_function ([function], optional): Function taking a pillow.Image and returns an activation value. Defaults to default_block_activation.
+
+        Raises:
+            ValueError: If more than one qr code is detected.
+            ValueError: If no than one qr code is detected.
+        """
         self.im = pil_image
         qr_list = decode(pil_image)
         if len(qr_list) > 1:
@@ -94,10 +116,20 @@ class BubbleReader:
 
     @property
     def qr_coords(self):
+        """The coordinates of the detected qr code.
+
+        Returns:
+            [numpy.array]: 4-ints
+        """
         return order_points(np.array(self.qr_data.polygon))
 
     @property
     def array_origin(self):
+        """The origin point where the bubble array is based at. Detected from the orientation qr code.
+
+        Returns:
+            [numpy array]: 4-ints
+        """
         tl, tr, br, bl = self.qr_coords
         xu, yu = self.unit_vectors
         if self.array_postition == "right":
@@ -111,6 +143,11 @@ class BubbleReader:
 
     @property
     def cropped_bubble_array(self) -> Image:
+        """Crops the bubble array
+
+        Returns:
+            Image: Image containing the crop.
+        """
         if self._cropped_bubble_array is not None:
             return self._cropped_bubble_array
 
@@ -129,7 +166,12 @@ class BubbleReader:
         return self._cropped_bubble_array
 
     @property
-    def block_processed_bubble_array(self):
+    def block_processed_bubble_array(self)-> Image:
+        """For debugging purposes only. The bubble array with cells processed.
+
+        Returns:
+            Image: The processed image that activation detection will take place.
+        """
         out = self.cropped_bubble_array.copy()
         for x, y in itertools.product(range(self.grid_w), range(self.grid_h)):
             out.paste(self.crop_block(x, y), (x * self.block_size, y * self.block_size))
@@ -138,6 +180,11 @@ class BubbleReader:
 
     @property
     def unit_vectors(self):
+        """Vectors that span a single cell of the bubble array.
+
+        Returns:
+            tuple: x-vector, y-vector as numpy arrays.
+        """
         tl, tr, br, bl = self.qr_coords
         x_unit = (tr - tl) / self.scale
         y_unit = (bl - tl) / self.scale
@@ -145,6 +192,11 @@ class BubbleReader:
 
     @property
     def source_quad(self):
+        """The coordinates of the corners of the bubble array.
+
+        Returns:
+            4-tuples: numpy arrays with the coordinates of the corners of the bubble array.
+        """
         xu, yu = self.unit_vectors
         array_origin = self.array_origin
 
@@ -156,6 +208,15 @@ class BubbleReader:
         return top_left, bottom_left, bottom_right, top_right
 
     def crop_block(self, x, y):
+        """Crop a cell in the bubble array and apply the block preprocessor
+
+        Args:
+            x (int): x-index of the cell
+            y (int): y-index of the cell
+
+        Returns:
+            pil.Image: Cropped and processed cell.
+        """
         shave = 0.1 * self.block_size
         r = (
             x * self.block_size + shave,
@@ -172,6 +233,11 @@ class BubbleReader:
 
     @property
     def block_activations(self):
+        """numpy array of the activation values for the bubble array.
+
+        Returns:
+            numpy.array: activation values for the bubble array.
+        """
         mat = np.zeros(shape=(self.grid_h, self.grid_w))
         for x, y in itertools.product(range(self.grid_w), range(self.grid_h)):
             mat[y, x] = self.block_val(x, y)
@@ -183,11 +249,22 @@ class BubbleReader:
         return self.block_activations / np.max(self.block_activations)
 
     def bubble_matrix(self, threshold=0.05):
+        """A true/false numpy array. True indicates an activated cell.
+
+        Args:
+            threshold (float, optional): The threshold at which a cell activation value indicates an activation. Defaults to 0.05.
+
+        Returns:
+            numpy.array: True/False activation values for the bubble array.
+        """
 
         return self.block_activations >= threshold
 
 
 class BubbleReaderFactory:
+    """
+    Factory that builds BubbleReaders with given preprocessors and activations
+    """
     def __init__(
         self,
         block_size=50,
@@ -195,6 +272,13 @@ class BubbleReaderFactory:
         block_preprocessor=default_block_preprocessor,
         block_activation_function=default_block_activation,
     ):
+        """
+        Args:
+            block_size (int, optional): The pixel size a cell in the bubble is cropped to. Defaults to 50.
+            array_preprocessor ([function], optional): Function taking a pillow.Image and returns pillow.Image of same size. Applied to the whole bubble array image before detection begins.  Defaults to default_array_preprocessor.
+            block_preprocessor ([function], optional): Function taking a pillow.Image and returns pillow.Image of same size. Applied to each cropped cell in the bubble array before detection begins. Defaults to default_block_preprocessor.
+            block_activation_function ([function], optional): Function taking a pillow.Image and returns an activation value. Defaults to default_block_activation.
+        """
         self.block_size = block_size
         self.array_preprocessor = array_preprocessor
         self.block_preprocessor = block_preprocessor

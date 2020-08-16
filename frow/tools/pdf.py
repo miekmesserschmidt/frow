@@ -1,11 +1,15 @@
+"""
+Tools for manipulating fitz pdf pages and documents
+"""
+
 from PIL import Image
 import io
 import numpy as np
 import os
 import shutil
 import fitz
-from . import inspect, box
-
+from . import inspect
+from ..other import box
 
 
 A4 = np.array((0, 0, 595, 842))
@@ -14,18 +18,20 @@ A4 = np.array((0, 0, 595, 842))
 def refit_pdf(
     in_, relative_paste_rect=None, abs_paste_rect=None, border=True,
 ):
-    """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit.
+    """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit. 
 
     Args:
-        source_fn : Source pdf filename
-        dest_fn : Destination pdf filename
+        in_ ([fitz doc]): Document to refit
         relative_rect : relative rect to paste into (one of relative_rect and absolute_rect must be None)
         absolute_rect : absolute rect to paste into (one of relative_rect and absolute_rect must be None)
         border : add a border. Defaults to True.
 
     Returns:
-        fitz_doc
+        [fitz doc]: Refitted fitz doc
     """
+    
+    
+    
     abs_paste_rect = box.ensure_absolute_box(relative_paste_rect, abs_paste_rect, A4)
 
     source_pdf = in_
@@ -46,6 +52,14 @@ def refit_pdf(
 
 
 def merge_pdf(source_list,):
+    """Merges all fitz docs in source_list into one pdf fitz doc in the order provided.
+    
+    Args:
+        source_list ([list of fitz docs]): List of fitz documents to merge
+
+    Returns:
+        [fitz doc]: merged fitz doc
+    """
     b = fitz.open()
     for a in source_list:
         b.insertPDF(a)
@@ -54,6 +68,17 @@ def merge_pdf(source_list,):
 
 
 def open_ensuring_pdf(source_fn, constructor = fitz.open):
+    """Opens a file ensuring that it is a pdf. Images are converted to pdf.
+    
+    Use the constructor parameter to allow different instantiations (e.g., multiprocessing friendly wrapper for fitz docs)
+
+    Args:
+        source_fn ([str]): source filename
+        constructor ([type], optional):  Defaults to fitz.open.
+
+    Returns:
+        [fitz doc]: Opened fitz document
+    """
     if inspect.is_pdf(source_fn):
         return constructor(source_fn)
     else:
@@ -62,17 +87,17 @@ def open_ensuring_pdf(source_fn, constructor = fitz.open):
         return d
 
 
-def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kwargs):
+def paste_pdf_on(fitz_page, source_doc, relative_rect=None, absolute_rect=None, **kwargs):
 
     """Pastes a source document onto the given fitz page.
 
 
     Args:
         fitz_page : page to paste onto
-        source : document to paste from
+        source_doc : document to paste from
         relative_rect : relative rect to paste into (one of relative_rect and absolute_rect must be None)
         absolute_rect : absolute rect to paste into (one of relative_rect and absolute_rect must be None)
-        kwargs : passed to fitz_page.showPDFpage (look up options)
+        kwargs : passed to fitz_page.showPDFpage (look up fitz options, e.g. different page)
 
     Returns:
         fitz_page
@@ -81,20 +106,19 @@ def paste_pdf_on(fitz_page, source, relative_rect=None, absolute_rect=None, **kw
         relative_rect, absolute_rect, fitz_page.rect
     )
 
-    fitz_page.showPDFpage(abs_paste_rect, source, **kwargs)
+    fitz_page.showPDFpage(abs_paste_rect, source_doc, **kwargs)
     return fitz_page
 
 
 def paste_pdf_on_every_page(
-    fitz_doc, source, relative_rect=None, absolute_rect=None, **kwargs
+    fitz_doc, source_doc, relative_rect=None, absolute_rect=None, **kwargs
 ):
-
     """Pastes a source document onto the given fitz page.
 
 
     Args:
         fitz_doc : doc to paste on
-        source : document to paste from
+        source_doc : document to paste from
         relative_rect : relative rect to paste into (one of relative_rect and absolute_rect must be None)
         absolute_rect : absolute rect to paste into (one of relative_rect and absolute_rect must be None)
         kwargs : passed to fitz_page.showPDFpage (look up options)
@@ -105,7 +129,7 @@ def paste_pdf_on_every_page(
     for p in fitz_doc.pages():
         paste_pdf_on(
             p,
-            source,
+            source_doc,
             relative_rect=relative_rect,
             absolute_rect=absolute_rect,
             **kwargs
@@ -144,6 +168,17 @@ def svg_plonk(fitz_doc):
 def crop_to_pillow_image(
     fitz_page, relative_rect=None, absolute_rect=None, zoom=1,
 ):
+    """Crops the given rect of a page to a pillow.Image. 
+
+    Args:
+        fitz_page ([fitz page]): pdf page to crop
+        relative_rect : relative rect to paste into (one of relative_rect and absolute_rect must be None)
+        absolute_rect : absolute rect to paste into (one of relative_rect and absolute_rect must be None)
+        zoom (int, optional): zoom level. Defaults to 1.
+
+    Returns:
+        [PIL.Image]: Image of the crop
+    """
     absolute_rect = box.ensure_absolute_box(
         relative_rect, absolute_rect, fitz_page.rect
     )
@@ -160,6 +195,14 @@ def crop_to_pillow_image(
 
 
 def doc_from_pages(fitz_pages,):
+    """Given a list of fitz pages, create a fitz doc with those pages
+
+    Args:
+        fitz_pages ([list of fitz pages]): Fits pages to make a new doc from
+
+    Returns:
+        [fitz doc]: A new fitz doc, with the provided pages
+    """
     doc = fitz.open()
     for p in fitz_pages:
         *_, w, h = p.rect

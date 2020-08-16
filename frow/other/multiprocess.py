@@ -1,6 +1,10 @@
 import fitz
 
 class PickableFitzDoc:
+    """A wrapper that behaves like a fitz doc, but is picklable so can be used with multiprocessing.
+    
+    Pass it as constructor to frow.tools.pdf.open_ensuring_pdf.
+    """
     
     def __init__(self, *args, **kwargs):
         self._args = args
@@ -36,6 +40,8 @@ class PickableFitzDoc:
     
 
 class PickableFitzPage:
+    """A wrapper that behaves like a fits page, but is picklable so can be used with multiprocessing.
+    """
     
     def __init__(self, doc_args, doc_kwargs, page_index, doc=None):
         self._doc_args = doc_args

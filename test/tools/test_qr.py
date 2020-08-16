@@ -4,7 +4,8 @@ from PIL import Image
 import subprocess
 import os
 import pytest
-from frow.tools import qr, box
+from frow.tools import qr
+from frow.other import box
 from pyzbar.pyzbar import decode
 import functional
 import json

@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frow.tools &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="frow.other" href="other.html" />
+    <link rel="prev" title="Introduction" href="../prose/intro.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="frow-tools">
+<h1>frow.tools<a class="headerlink" href="#frow-tools" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-frow.tools.inspect">
+<span id="frow-tools-inspect"></span><h2>frow.tools.inspect<a class="headerlink" href="#module-frow.tools.inspect" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="frow.tools.inspect.is_pdf">
+<code class="sig-prename descclassname">frow.tools.inspect.</code><code class="sig-name descname">is_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.inspect.is_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if path is a pdf, or if all the files at the path (recursively traversed) are pdf, else False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>[</em><em>str</em><em>]</em>) – Path to test</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-frow.tools.orientation">
+<span id="frow-tools-orientation"></span><h2>frow.tools.orientation<a class="headerlink" href="#module-frow.tools.orientation" title="Permalink to this headline">¶</a></h2>
+<p>Tools for detecting and correcting page orientations.</p>
+<dl class="py function">
+<dt id="frow.tools.orientation.orient_by_id_mark">
+<code class="sig-prename descclassname">frow.tools.orientation.</code><code class="sig-name descname">orient_by_id_mark</code><span class="sig-paren">(</span><em class="sig-param">fitz_page</em>, <em class="sig-param">relative_window=None</em>, <em class="sig-param">abs_window=None</em>, <em class="sig-param">position=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0</em>, <em class="sig-param">1)</em>, <em class="sig-param">activation=&lt;function json_type_str_activation&gt;</em>, <em class="sig-param">zoom=4</em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.orientation.orient_by_id_mark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orients a page by detecting the position of the page_id_mark, and placing it in the specified position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz.page</em><em>]</em>) – Page to orient</p></li>
+<li><p><strong>relative_window</strong> – a 4-tuple in relative coordinates e.g., (0,0,0.5.,0.5).
+The page corners will be cropped into four images of this size.</p></li>
+<li><p><strong>abs_window</strong> – a 4-tuple in absolute coordinates e.g., (0,0,0.5.,0.5).  (One of relative_window and abs_window but not both must be not None)
+The page corners will be cropped into four images of this size. (One of relative_window and abs_window but not both must be not None)</p></li>
+<li><p><strong>position</strong> (<em>4-tuple</em>) – The postion where the page_id_mark should be when the page is oriented correctly. Defaults to BOTTOM_LEFT.</p></li>
+<li><p><strong>activation</strong> (<em>[</em><em>function</em><em>]</em><em>, </em><em>optional</em>) – Function that takes a list of detected qr_codes and returns True if a page_id_mark is among them.  Defaults to json_type_str_activation.</p></li>
+<li><p><strong>zoom</strong> (<em>float</em><em>, </em><em>optional</em>) – Zoom level. Defaults to 4.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.orientation.orient_page">
+<code class="sig-prename descclassname">frow.tools.orientation.</code><code class="sig-name descname">orient_page</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">orientation_vector</span></em>, <em class="sig-param"><span class="n">correct_orientation_vector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.orientation.orient_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orients a page so that its orientation is correct.</p>
+<p>If successful, when the orientation is measured again, it will equal the correct orientation vector.</p>
+<p>WARNING: fitz, rotations are relative. Do an svg_plonk to fix the page rotations!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> – a fitz page</p></li>
+<li><p><strong>orientation_vector</strong> – the page’s current orientation vector e.g., (False, True, False, False), meaning top_right_activated.</p></li>
+<li><p><strong>correct_orientation_vector</strong> – the page’s desired orientation vector, e.g., (True, False, False, False), meaning top_left should be activated.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.orientation.orientation_vector_from_qr">
+<code class="sig-prename descclassname">frow.tools.orientation.</code><code class="sig-name descname">orientation_vector_from_qr</code><span class="sig-paren">(</span><em class="sig-param">fitz_page</em>, <em class="sig-param">relative_window=None</em>, <em class="sig-param">abs_window=None</em>, <em class="sig-param">activation=&lt;function default_activation&gt;</em>, <em class="sig-param">zoom=4</em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.orientation.orientation_vector_from_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the orientation of a page by detecting qr_codes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> – a fitz page</p></li>
+<li><p><strong>relative_window</strong> – a 4-tuple in relative coordinates e.g., (0,0,0.5.,0.5).
+The page corners will be cropped into four images of this size.</p></li>
+<li><p><strong>abs_window</strong> – a 4-tuple in absolute coordinates e.g., (0,0,0.5.,0.5).  (One of relative_window and abs_window but not both must be not None)
+The page corners will be cropped into four images of this size. (One of relative_window and abs_window but not both must be not None)</p></li>
+<li><p><strong>activation</strong> – a function that takes a list of detected qr_codes from the window translated to the corners of the pages, and returns some activation value (prefarably true or false)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the activation for the four corners in the order (top_left, top_right, bottom_right, bottom_left)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-frow.tools.pdf">
+<span id="frow-tools-pdf"></span><h2>frow.tools.pdf<a class="headerlink" href="#module-frow.tools.pdf" title="Permalink to this headline">¶</a></h2>
+<p>Tools for manipulating fitz pdf pages and documents</p>
+<dl class="py function">
+<dt id="frow.tools.pdf.crop_to_pillow_image">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">crop_to_pillow_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.crop_to_pillow_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crops the given rect of a page to a pillow.Image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – pdf page to crop</p></li>
+<li><p><strong>relative_rect</strong> – relative rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> – absolute rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>int</em><em>, </em><em>optional</em>) – zoom level. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Image of the crop</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[PIL.Image]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.doc_from_pages">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">doc_from_pages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_pages</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.doc_from_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of fitz pages, create a fitz doc with those pages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fitz_pages</strong> (<em>[</em><em>list of fitz pages</em><em>]</em>) – Fits pages to make a new doc from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new fitz doc, with the provided pages</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz doc]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.merge_pdf">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">merge_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.merge_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges all fitz docs in source_list into one pdf fitz doc in the order provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_list</strong> (<em>[</em><em>list of fitz docs</em><em>]</em>) – List of fitz documents to merge</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>merged fitz doc</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz doc]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.open_ensuring_pdf">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">open_ensuring_pdf</code><span class="sig-paren">(</span><em class="sig-param">source_fn</em>, <em class="sig-param">constructor=&lt;class 'fitz.fitz.Document'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.open_ensuring_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens a file ensuring that it is a pdf. Images are converted to pdf.</p>
+<p>Use the constructor parameter to allow different instantiations (e.g., multiprocessing friendly wrapper for fitz docs)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_fn</strong> (<em>[</em><em>str</em><em>]</em>) – source filename</p></li>
+<li><p><strong>constructor</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Defaults to fitz.open.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Opened fitz document</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz doc]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.paste_pdf_on">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">paste_pdf_on</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">source_doc</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.paste_pdf_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastes a source document onto the given fitz page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> – page to paste onto</p></li>
+<li><p><strong>source_doc</strong> – document to paste from</p></li>
+<li><p><strong>relative_rect</strong> – relative rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> – absolute rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>kwargs</strong> – passed to fitz_page.showPDFpage (look up fitz options, e.g. different page)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>fitz_page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.paste_pdf_on_every_page">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">paste_pdf_on_every_page</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_doc</span></em>, <em class="sig-param"><span class="n">source_doc</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.paste_pdf_on_every_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastes a source document onto the given fitz page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_doc</strong> – doc to paste on</p></li>
+<li><p><strong>source_doc</strong> – document to paste from</p></li>
+<li><p><strong>relative_rect</strong> – relative rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> – absolute rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>kwargs</strong> – passed to fitz_page.showPDFpage (look up options)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>fitz_page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.refit_pdf">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">refit_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_</span></em>, <em class="sig-param"><span class="n">relative_paste_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">abs_paste_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">border</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.refit_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refits all pages of a pdf. Used, e.g., to shrink pages’ content a bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in</strong> (<em>[</em><em>fitz doc</em><em>]</em>) – Document to refit</p></li>
+<li><p><strong>relative_rect</strong> – relative rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> – absolute rect to paste into (one of relative_rect and absolute_rect must be None)</p></li>
+<li><p><strong>border</strong> – add a border. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Refitted fitz doc</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz doc]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.pdf.svg_plonk">
+<code class="sig-prename descclassname">frow.tools.pdf.</code><code class="sig-name descname">svg_plonk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.pdf.svg_plonk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies a fitz document through converting each page to svg first.</p>
+<p>This is done so that e.g., rotations of pages are fixed to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fitz_doc</strong> – a fitz document</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a new fitz document</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>fitz_doc</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-frow.tools.qr">
+<span id="frow-tools-qr"></span><h2>frow.tools.qr<a class="headerlink" href="#module-frow.tools.qr" title="Permalink to this headline">¶</a></h2>
+<p>Tools for reading and creating qr codes.</p>
+<dl class="py function">
+<dt id="frow.tools.qr.grab_qr_codes">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">grab_qr_codes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.grab_qr_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes all qr codes in the given rectangle and returns the decoded data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – page to grab the data from.</p></li>
+<li><p><strong>relative_window_rect</strong> (<em>4-tuple</em>) – Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>abs_window_rect</strong> (<em>4-tuple</em>) – Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>int</em><em>, </em><em>optional</em>) – zoom level for rasterization. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all the qr_codes detected</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[list]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.qr.qr_pdf">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">qr_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">200, 100</span></em>, <em class="sig-param"><span class="n">qr_relative_rect</span><span class="o">=</span><span class="default_value">0.5, 0, 1, 1</span></em>, <em class="sig-param"><span class="n">text_relative_rect</span><span class="o">=</span><span class="default_value">0, 0, 0.5, 1</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.qr_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a fitz pdf containing a qr_code and its data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>[</em><em>str</em><em>]</em>) – data to encoding into the qr code</p></li>
+<li><p><strong>dimensions</strong> (<em>2-tuple</em><em>, </em><em>optional</em>) – Dimensions of the output. Defaults to (200, 100).</p></li>
+<li><p><strong>qr_relative_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – Where to place the qr_code in the pdf result. Defaults to (0.5, 0, 1, 1).</p></li>
+<li><p><strong>text_relative_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – Where to place the text in the pdf result. Defaults to (0, 0, 0.5, 1).</p></li>
+<li><p><strong>fontsize</strong> (<em>int</em><em>, </em><em>optional</em>) – Font size of text. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resulting qr pdf.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[fitz pdf]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="frow.tools.qr.read_json_qr">
+<code class="sig-prename descclassname">frow.tools.qr.</code><code class="sig-name descname">read_json_qr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitz_page</span></em>, <em class="sig-param"><span class="n">relative_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">absolute_rect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.qr.read_json_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a qr code encoding a json string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – page to grab the data from.</p></li>
+<li><p><strong>relative_rect</strong> (<em>[</em><em>4-tuple</em><em>]</em><em>, </em><em>optional</em>) – [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> (<em>[</em><em>4-tuple</em><em>]</em><em>, </em><em>optional</em>) – [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>float</em><em>, </em><em>optional</em>) – Zoom level. Defaults to 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If no qr codes are detected</p></li>
+<li><p><strong>ValueError</strong> – If multiple qr codes are detected</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A frozendict from the read json string</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[frozendict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../prose/intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">frow.tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.inspect">frow.tools.inspect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.orientation">frow.tools.orientation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.pdf">frow.tools.pdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.qr">frow.tools.qr</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="other.html">frow.other</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bubbles.html">frow.tools.bubbles</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../prose/intro.html" title="previous chapter">Introduction</a></li>
+      <li>Next: <a href="other.html" title="next chapter">frow.other</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/tools.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

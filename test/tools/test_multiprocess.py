@@ -5,7 +5,7 @@ import subprocess
 import fitz
 import os
 import pytest
-from frow.tools import pdf, inspect, multiprocess
+from frow.other import multiprocess
 
 
 def test_multi_process_fitz_doc(tmp_path):

@@ -1,5 +1,6 @@
 import json
-from ..tools import pdf, qr, box
+from ..tools import pdf, qr
+from ..other import box
 
 
 def add_page_id_marks(
