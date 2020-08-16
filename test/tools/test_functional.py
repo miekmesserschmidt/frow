@@ -33,7 +33,7 @@ def test_starmap_for_each():
     def f(a,b):
         l.append(a)
         
-    s = functional.seq([(1,2),(3,4)]).star_for_each(f).list()
+    s = functional.seq([(1,2),(3,4)]).star_chained_for_each(f).list()
     assert l == [1,3]
 
 def test_distribute():

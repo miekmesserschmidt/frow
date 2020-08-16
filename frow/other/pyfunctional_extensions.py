@@ -37,7 +37,7 @@ def zip_starmap(it, func):
 
 
 @functional.pipeline.extend()
-def star_for_each(it, func):
+def star_chained_for_each(it, func):
     """Same as for_each, but \*-unpacks inputs
 
     Args:
@@ -50,6 +50,22 @@ def star_for_each(it, func):
     it0, it1 = itertools.tee(it, 2)    
     for i in it1:        
         func(*i)
+    return it0
+
+@functional.pipeline.extend()
+def chained_for_each(it, func):
+    """Same as for_each, but \*-unpacks inputs
+
+    Args:
+        it ([type]): iterator to map on
+        func ([type]): function to map
+        
+    Returns:
+        [iterator]: equivalent to generator expression ```(func(*a) for a in a in it)```
+    """
+    it0, it1 = itertools.tee(it, 2)    
+    for i in it1:        
+        func(i)
     return it0
 
 

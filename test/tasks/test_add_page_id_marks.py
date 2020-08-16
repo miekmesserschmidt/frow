@@ -2,7 +2,7 @@ import subprocess
 import fitz
 import os
 import pytest
-import frow.tasks.tasks as tasks
+import frow.tools.common as tasks
 from frow.tools import qr
 
 
