@@ -15,44 +15,31 @@ fns = [fn] * N
 
 
 
+def add_student_number_bubbles(id_, doc):
+    return pdf.paste_pdf_on(doc[0], st_num_bubbles, relative_rect=(0.5, 0.06, 0.9, 0.3))
 
-# Paste the student number bubbles
+def add_page_id_marks(id_, doc):
+    return common.add_page_id_marks(
+        doc, {"doc_id": id_}, relative_rect=(0.05, 0.9, 0.25, 0.95)
+    )
+    
+def save(id_, doc):
+    doc.save(f"{path}/serial_numbered_pdfs/{id_}.pdf")
+
+# Paste the student number bubbles and id marks and save the documents
 a = afterburn.AfterBurn(fns)
 (
     a.map(pdf.open_ensuring_pdf, a._)
-    .list(a._)
-    .walrus(_docs := a._)
-    .generator(
-        pdf.paste_pdf_on(doc[0], st_num_bubbles, relative_rect=(0.5, 0.06, 0.9, 0.3))
-        for doc in _docs
-    )
+    .enumerate(a._)    
+    .lazy_starapply(add_student_number_bubbles)
+    .lazy_starapply(add_page_id_marks)
+    .lazy_starapply(save)    
     .tqdm(a._)
-    .consume(a._)
-)
-
-# Paste the it marks
-(
-    a.generator(
-        common.add_page_id_marks(
-            doc, {"doc_id": id_}, relative_rect=(0.05, 0.9, 0.25, 0.95)
-        )
-        for id_, doc in enumerate(_docs)
-    )
-    .tqdm(a._)
-    .consume(a._)
-)
-
-# save the documents
-(
-    a.generator(
-        doc.save(f"{path}/serial_numbered_pdfs/{id_}.pdf")
-        for id_, doc in enumerate(_docs)
-    )
-    .tqdm(a._)
-    .consume(a._)
+    .consume()
 )
 
 
-all_exams = pdf.merge_pdf(_docs)
+
+all_exams = pdf.merge_pdf( doc for id_, doc in a._)
 all_exams.save(f"{path}/serial_numbered_pdfs/all.pdf")
 

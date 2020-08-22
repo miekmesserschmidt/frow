@@ -98,10 +98,16 @@ doc_id_to_pages = (
 # recollate each student's pages
 (
     a.generator(
-        pdf.doc_from_pages(
-            d.page for d in sorted(pages_data, key=lambda d: d.page_index)
-        ).save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf")
+        (doc_id, sorted(pages_data, key=lambda d: d.page_index))
         for doc_id, pages_data in doc_id_to_pages.items()
+    )    
+    .generator(
+        (doc_id, pdf.doc_from_pages(d.page for d in pages_data))
+        for doc_id, pages_data in a._
+    )
+    .generator(
+        doc.save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf")
+        for doc_id, doc in a._
     )
     .tqdm(a._)
     .consume(a._)
