@@ -1,16 +1,18 @@
 import os
+
 path, *_ = os.path.split(__file__)
 
-import numpy as np
-import types
-import pathlib
+import afterburn
+from tqdm import tqdm
+from frow.tools import qr, pdf, bubbles
+import more_itertools
 import itertools
 
-from frow.tools import pdf, qr, bubbles
-from frow.other import pyfunctional_extensions
-from functional import seq
+import types
+import pathlib
 
-import uuid
+import numpy as np
+
 
 
 score_array = np.array(
@@ -41,14 +43,23 @@ def student_id(page0):
 
 
 scan_fns = list(pathlib.Path(f"{path}/graded").glob("*.pdf"))
-docs = (seq(scan_fns).map(pdf.open_ensuring_pdf)).list()
-pages = (seq(docs).map(lambda d: d.pages()).flatten()).list()
+a = afterburn.AfterBurn(scan_fns)
 
-# read the id_mark and score bubbles on each page.
-pages_data = (
-    seq(pages)
-    .map(
-        lambda p: types.SimpleNamespace(
+(
+    a.map(pdf.open_ensuring_pdf, a._)
+    .list(a._)
+    .walrus(_docs:=a._)
+    .generator(doc.pages() for doc in a._)
+    .more_itertools.flatten(a._)
+    .tqdm(a._)
+    .list(a._)
+    .walrus(_pages:=a._)
+)
+
+# Collect the id_mark info
+(
+    a.generator(
+        types.SimpleNamespace(
             **{
                 "page": p,
                 "id_mark_data": (
@@ -63,45 +74,50 @@ pages_data = (
                 "score": float(np.sum(b * score_array)),
             }
         )
+        for p in _pages
     )
-    .with_progress(len(pages))
-).list()
+    .tqdm(a._)
+    .list(a._)
+    .walrus(_pages_data:=a._)
+)
+
 
 # create a map from a doc_id to a student id
 doc_id_to_st_id = dict(
-    seq(pages_data)
-    .with_progress(len(pages_data))
-    .filter(lambda pdata: pdata.page_index == 0)
-    .map(lambda pdata: (pdata.doc_id, student_id(pdata.page)))
+    (pd.doc_id, student_id(pd.page)) for pd in _pages_data if pd.page_index == 0
 )
+
+# create a map from a doc_id to pages data
+doc_id_to_pages = (
+    a.more_itertools.bucket(_pages_data, key=lambda pd: pd.doc_id)
+    .dict((doc_id, list(a._[doc_id])) for doc_id in a._)
+    ._
+)
+
 
 # recollate each student's pages
 (
-    seq(pages_data)
-    .group_by(lambda dpata: dpata.doc_id)
-    .starmap(
-        lambda doc_id, pdata: (
-            doc_id,
-            pdf.doc_from_pages(
-                d.page for d in 
-                sorted(pdata, key=lambda d: d.page_index)
-            ),
-        )
+    a.generator(
+        pdf.doc_from_pages(
+            d.page for d in sorted(pages_data, key=lambda d: d.page_index)
+        ).save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf")
+        for doc_id, pages_data in doc_id_to_pages.items()
     )
-    .star_chained_for_each(lambda doc_id, doc : doc.save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf"))
-).list()
+    .tqdm(a._)
+    .consume(a._)
+)
 
-
-# calculate the grades and save to a csv
+# calculate the grades to save to a csv
 (
-    seq(pages_data)
-    .group_by(lambda dpata: dpata.doc_id)
-    .starmap(
-        lambda doc_id, pdata: itertools.chain(
+    a.generator(
+        itertools.chain(
             (doc_id_to_st_id[doc_id], doc_id),
-            (d.score for d in sorted(pdata, key=lambda d: d.page_index)),
-            tuple([sum(d.score for d in pdata)]),
+            (d.score for d in sorted(pages_data, key=lambda d: d.page_index)),
+            tuple([sum(d.score for d in pages_data)]),
         )
+        for doc_id, pages_data in doc_id_to_pages.items()
     )
-).to_csv(f"{path}/grades.csv")
-
+    .map(tuple, a._)
+    .list(a._)
+)
+print(a._)

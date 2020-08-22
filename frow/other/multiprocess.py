@@ -16,6 +16,9 @@ class PickableFitzDoc:
         if not self._doc:            
             self._doc = fitz.open(*self._args, **self._kwargs)
         return self._doc
+    
+    def __repr__(self):
+        return f"{self.doc.name}"
         
     def __getattr__(self, name):
         return getattr(self.doc, name)
@@ -50,6 +53,11 @@ class PickableFitzPage:
         
         self._doc = doc
         self._page = None
+
+
+    def __repr__(self):
+        return f"Pageindex {self._page_index} in {self.doc.name}"
+
 
     @property
     def doc(self):
