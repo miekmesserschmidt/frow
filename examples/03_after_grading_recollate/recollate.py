@@ -2,7 +2,6 @@ import os
 
 path, *_ = os.path.split(__file__)
 
-import afterburn
 from tqdm import tqdm
 from frow.tools import qr, pdf, bubbles
 import more_itertools
@@ -13,6 +12,11 @@ import pathlib
 
 import numpy as np
 
+from collections import deque
+
+
+def consume(it):
+    deque(it, maxlen=0)
 
 
 score_array = np.array(
@@ -31,7 +35,7 @@ score_array = np.array(
 )
 
 
-def student_id(page0):
+def read_student_id(page0):
     return "".join(
         map(
             str,
@@ -42,88 +46,68 @@ def student_id(page0):
     )
 
 
-scan_fns = list(pathlib.Path(f"{path}/graded").glob("*.pdf"))
-a = afterburn.AfterBurn(scan_fns)
+def read_page_data(p):
+    return types.SimpleNamespace(
+        **{
+            "page": p,
+            "id_mark_data": (
+                data := qr.read_json_qr(p, relative_rect=(0, 0.6, 0.3, 1), zoom=4)
+            ),
+            "doc_id": data.get("doc_id"),
+            "page_index": data.get("page_index"),
+            "total_pages": data.get("total_pages"),
+            "score_bubbles": (
+                b := bubbles.read(p, relative_rect=(0.8, 0, 1, 0.5), zoom=4)
+            ),
+            "score": float(np.sum(b * score_array)),
+        }
+    )
 
-(
-    a.map(pdf.open_ensuring_pdf, a._)
-    .list(a._)
-    .walrus(_docs:=a._)
-    .generator(doc.pages() for doc in a._)
-    .more_itertools.flatten(a._)
-    .tqdm(a._)
-    .list(a._)
-    .walrus(_pages:=a._)
-)
+
+scan_fns = list(pathlib.Path(f"{path}/graded").glob("*.pdf"))
+
+
+docs = list(map(pdf.open_ensuring_pdf, scan_fns))
+_ = (d.pages() for d in docs)
+_ = more_itertools.flatten(_)
+pages = list(_)
 
 # Collect the id_mark info
-(
-    a.generator(
-        types.SimpleNamespace(
-            **{
-                "page": p,
-                "id_mark_data": (
-                    data := qr.read_json_qr(p, relative_rect=(0, 0.6, 0.3, 1), zoom=4)
-                ),
-                "doc_id": data.get("doc_id"),
-                "page_index": data.get("page_index"),
-                "total_pages": data.get("total_pages"),
-                "score_bubbles": (
-                    b := bubbles.read(p, relative_rect=(0.8, 0, 1, 0.5), zoom=4)
-                ),
-                "score": float(np.sum(b * score_array)),
-            }
-        )
-        for p in _pages
-    )
-    .tqdm(a._)
-    .list(a._)
-    .walrus(_pages_data:=a._)
-)
-
+pages_data = list(read_page_data(p) for p in tqdm(pages))
 
 # create a map from a doc_id to a student id
 doc_id_to_st_id = dict(
-    (pd.doc_id, student_id(pd.page)) for pd in _pages_data if pd.page_index == 0
+    (pd.doc_id, read_student_id(pd.page))
+    for pd in tqdm(pages_data)
+    if pd.page_index == 0
 )
 
 # create a map from a doc_id to pages data
-doc_id_to_pages = (
-    a.more_itertools.bucket(_pages_data, key=lambda pd: pd.doc_id)
-    .dict((doc_id, list(a._[doc_id])) for doc_id in a._)
-    ._
-)
-
+_ = more_itertools.bucket(tqdm(pages_data), key=lambda pd: pd.doc_id)
+doc_id_to_pages = dict((doc_id, list(_[doc_id])) for doc_id in _)
 
 # recollate each student's pages
-(
-    a.generator(
-        (doc_id, sorted(pages_data, key=lambda d: d.page_index))
-        for doc_id, pages_data in doc_id_to_pages.items()
-    )    
-    .generator(
-        (doc_id, pdf.doc_from_pages(d.page for d in pages_data))
-        for doc_id, pages_data in a._
-    )
-    .generator(
-        doc.save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf")
-        for doc_id, doc in a._
-    )
-    .tqdm(a._)
-    .consume(a._)
+_ = (
+    (doc_id, sorted(pages_data, key=lambda d: d.page_index))
+    for doc_id, pages_data in doc_id_to_pages.items()
 )
+_ = (
+    (doc_id, pdf.doc_from_pages(d.page for d in pages_data)) for doc_id, pages_data in _
+)
+_ = (doc.save(f"{path}/recollated/{doc_id_to_st_id[doc_id]}.pdf") for doc_id, doc in _)
+consume(tqdm(_))
+
 
 # calculate the grades to save to a csv
-(
-    a.generator(
+_ = (
+    list(
         itertools.chain(
             (doc_id_to_st_id[doc_id], doc_id),
             (d.score for d in sorted(pages_data, key=lambda d: d.page_index)),
             tuple([sum(d.score for d in pages_data)]),
         )
-        for doc_id, pages_data in doc_id_to_pages.items()
     )
-    .map(tuple, a._)
-    .list(a._)
+    for doc_id, pages_data in doc_id_to_pages.items()
 )
-print(a._)
+grades = list(tqdm(_))
+print(grades)
