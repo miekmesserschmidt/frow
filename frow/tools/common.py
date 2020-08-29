@@ -1,7 +1,8 @@
+import os
 import json
 from . import pdf, qr
 from ..other import box
-
+import more_itertools
 
 def add_page_id_marks(
     fitz_doc,

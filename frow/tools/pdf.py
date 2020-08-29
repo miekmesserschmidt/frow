@@ -10,7 +10,7 @@ import shutil
 import fitz
 from . import inspect
 from ..other import box
-
+import more_itertools
 
 A4 = np.array((0, 0, 595, 842))
 
@@ -211,3 +211,28 @@ def doc_from_pages(fitz_pages,):
 
     return doc
 
+
+
+def bucket_merge(fns, out_path, key = lambda x : x, out_fn_template="{key}.pdf"):
+    """Merges a list of filenames of pdf's and images according to a key function on the filename
+      (images converted to pdf when opened).
+
+    Args:
+        fns ([type]): A list of filenames of pdfs and images.
+        out_path ([type]): Path where the merged pdfs should be saved
+        key ([fn], optional):  The key function determining how files are to be bucketed. Defaults to lambdax:x.
+        out_fn_template ([str], optional): the template used for the output filenames (default "{key}.pdf").
+    """
+    b = more_itertools.bucket(fns, key)
+    buckets = {k: list(b[k]) for k in b}
+    
+    
+    for id_, item_fns in buckets.items():
+        
+        out_fn = out_fn_template.format(key=id_)
+        out_fn = os.path.join(out_path, out_fn)
+        out = merge_pdf(open_ensuring_pdf(fn) for fn in item_fns)
+        out.save(out_fn)
+        
+    
+        
