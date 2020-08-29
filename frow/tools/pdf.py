@@ -29,9 +29,7 @@ def refit_pdf(
     Returns:
         [fitz doc]: Refitted fitz doc
     """
-    
-    
-    
+
     abs_paste_rect = box.ensure_absolute_box(relative_paste_rect, abs_paste_rect, A4)
 
     source_pdf = in_
@@ -67,7 +65,7 @@ def merge_pdf(source_list,):
     return b
 
 
-def open_ensuring_pdf(source_fn, constructor = fitz.open):
+def open_ensuring_pdf(source_fn, constructor=fitz.open):
     """Opens a file ensuring that it is a pdf. Images are converted to pdf.
     
     Use the constructor parameter to allow different instantiations (e.g., multiprocessing friendly wrapper for fitz docs)
@@ -87,7 +85,9 @@ def open_ensuring_pdf(source_fn, constructor = fitz.open):
         return d
 
 
-def paste_pdf_on(fitz_page, source_doc, relative_rect=None, absolute_rect=None, **kwargs):
+def paste_pdf_on(
+    fitz_page, source_doc, relative_rect=None, absolute_rect=None, **kwargs
+):
 
     """Pastes a source document onto the given fitz page.
 
@@ -212,8 +212,9 @@ def doc_from_pages(fitz_pages,):
     return doc
 
 
-
-def bucket_merge(fns, out_path, key = lambda x : x, out_fn_template="{key}.pdf"):
+def bucket_merge(
+    fns, out_path, key=lambda x: x, out_fn_template="{key}.pdf", sort_key=None
+):
     """Merges a list of filenames of pdf's and images according to a key function on the filename
       (images converted to pdf when opened).
 
@@ -225,14 +226,11 @@ def bucket_merge(fns, out_path, key = lambda x : x, out_fn_template="{key}.pdf")
     """
     b = more_itertools.bucket(fns, key)
     buckets = {k: list(b[k]) for k in b}
-    
-    
+
     for id_, item_fns in buckets.items():
-        
+
         out_fn = out_fn_template.format(key=id_)
         out_fn = os.path.join(out_path, out_fn)
-        out = merge_pdf(open_ensuring_pdf(fn) for fn in item_fns)
+        out = merge_pdf(open_ensuring_pdf(fn) for fn in sorted(item_fns, key=sort_key))
         out.save(out_fn)
-        
-    
-        
+
