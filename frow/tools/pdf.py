@@ -213,7 +213,7 @@ def doc_from_pages(fitz_pages,):
 
 
 def bucket_merge(
-    fns, out_path, key=lambda x: x, out_fn_template="{key}.pdf", sort_key=None
+    fns, out_path, key=lambda x: x, out_fn_template="{key}", sort_key=None
 ):
     """Merges a list of filenames of pdf's and images according to a key function on the filename
       (images converted to pdf when opened).
