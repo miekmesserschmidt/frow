@@ -9,8 +9,8 @@ import os
 import shutil
 import fitz
 from . import inspect
-from ..other import box
-import more_itertools
+from ..other import box, itools
+# import more_itertools
 
 A4 = np.array((0, 0, 595, 842))
 
@@ -212,58 +212,29 @@ def doc_from_pages(fitz_pages,):
     return doc
 
 
-
-
-def bucket_merge_gen(
-    fns, key=lambda x: x, sort_key=None
-):
-    """Merges a list of filenames of pdf's and images according to a key function on the filename
-      (images converted to pdf when opened).
-      
-      Yields pairs (key, fitz_document)
+def bucket_merge(buckets:dict):
+    """Merges over a dict {key:list_of_filenames}, 
+    yielding pairs key and a merged fitz doc containing 
+    all pdfs whose filenames occured in the  list associated with a key.
 
     Args:
-        fns ([type]): A list of filenames of pdfs and images.
-        key ([fn], optional):  The key function determining how files are to be bucketed. Defaults to lambdax:x.
-        sort_key : key to sort filenames by. Determines the order of files in the merge.
+        buckets (dict): A dictionary of form {key : List of Filenames}
+
+    Yields:
+        [tuple]: (key, fitz_doc)
     """
-    b = more_itertools.bucket(fns, key)
-    buckets = {k: list(b[k]) for k in b}
 
     for id_, item_fns in buckets.items():
-        out = merge_pdf(open_ensuring_pdf(fn) for fn in sorted(item_fns, key=sort_key))
+        out = merge_pdf(open_ensuring_pdf(fn) for fn in item_fns)
         yield id_, out
-
-def bucket_merge(
-    fns, out_path, key=lambda x: x, out_fn_template="{key}", sort_key=None
-):
-    """Merges a list of filenames of pdf's and images according to a key function on the filename
-      (images converted to pdf when opened). 
-      Saves the merged files in out_path
-
-    Args:
-        fns ([type]): A list of filenames of pdfs and images.
-        out_path ([type]): Path where the merged pdfs should be saved
-        key ([fn], optional):  The key function determining how files are to be bucketed. Defaults to lambdax:x.
-        out_fn_template ([str], optional): the template used for the output filenames (default "{key}.pdf").
-        sort_key : key to sort filenames by. Determines the order of files in the merge.
-    """    
-
-    for id_, doc in bucket_merge_gen(fns, key=key, sort_key=sort_key):
-        out_fn = out_fn_template.format(key=id_)
-        out_fn = os.path.join(out_path, out_fn)
-        doc.save(out_fn)
-
 
 
 
 def place_text(
     fitz_page, s: str, relative_rect=None, absolute_rect=None, fontsize=10,
 ):
-    text_rect = box.ensure_absolute_box(
-        relative_rect, absolute_rect, fitz_page.rect
-    )    
-    
+    text_rect = box.ensure_absolute_box(relative_rect, absolute_rect, fitz_page.rect)
+
     fitz_page.insertTextbox(text_rect, buffer=s, fontsize=fontsize)
     return fitz_page
 

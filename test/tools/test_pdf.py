@@ -5,6 +5,7 @@ import subprocess
 import os
 import pytest
 from frow.tools import pdf, inspect
+from frow.other import itools
 
 
 def test_refit(tmp_path):
@@ -90,30 +91,15 @@ def test_open_ensuring_pdf(tmp_path, img_fn):
     # subprocess.call(["xdg-open", out])
 
 
+
 def test_bucket_merge(tmp_path):
     fns = pathlib.Path("test/fixtures/bucket_merge").glob("**/*")
     fns = [str(fn) for fn in fns]
     from frow.up import extract_first_st_num
+    
+    buckets = itools.bucket(fns, bucket_key=extract_first_st_num)
 
-    pdf.bucket_merge(
-        fns, tmp_path, key=extract_first_st_num, out_fn_template="{key}.pdf"
-    )
-
-    a = fitz.open(os.path.join(tmp_path, "u00000000.pdf"))
-    b = fitz.open(os.path.join(tmp_path, "u00000001.pdf"))
-
-    assert a.pageCount == 2
-    assert b.pageCount == 3
-
-
-
-
-def test_bucket_merge_gen(tmp_path):
-    fns = pathlib.Path("test/fixtures/bucket_merge").glob("**/*")
-    fns = [str(fn) for fn in fns]
-    from frow.up import extract_first_st_num
-
-    for key, doc in pdf.bucket_merge_gen(fns, key=extract_first_st_num):
+    for key, doc in pdf.bucket_merge(buckets):
         doc.save(os.path.join(tmp_path, f"{key}.pdf"))
 
     a = fitz.open(os.path.join(tmp_path, "u00000000.pdf"))
