@@ -216,13 +216,15 @@ def bucket_merge(
     fns, out_path, key=lambda x: x, out_fn_template="{key}", sort_key=None
 ):
     """Merges a list of filenames of pdf's and images according to a key function on the filename
-      (images converted to pdf when opened).
+      (images converted to pdf when opened). 
+      Saves the merged files in out_path
 
     Args:
         fns ([type]): A list of filenames of pdfs and images.
         out_path ([type]): Path where the merged pdfs should be saved
         key ([fn], optional):  The key function determining how files are to be bucketed. Defaults to lambdax:x.
         out_fn_template ([str], optional): the template used for the output filenames (default "{key}.pdf").
+        sort_key : key to sort filenames by. Determines the order of files in the merge.
     """
     b = more_itertools.bucket(fns, key)
     buckets = {k: list(b[k]) for k in b}
@@ -233,4 +235,37 @@ def bucket_merge(
         out_fn = os.path.join(out_path, out_fn)
         out = merge_pdf(open_ensuring_pdf(fn) for fn in sorted(item_fns, key=sort_key))
         out.save(out_fn)
+
+
+
+def bucket_merge_gen(
+    fns, key=lambda x: x, sort_key=None
+):
+    """Merges a list of filenames of pdf's and images according to a key function on the filename
+      (images converted to pdf when opened).
+      
+      Yields pairs (key, fitz_document)
+
+    Args:
+        fns ([type]): A list of filenames of pdfs and images.
+        key ([fn], optional):  The key function determining how files are to be bucketed. Defaults to lambdax:x.
+        sort_key : key to sort filenames by. Determines the order of files in the merge.
+    """
+    b = more_itertools.bucket(fns, key)
+    buckets = {k: list(b[k]) for k in b}
+
+    for id_, item_fns in buckets.items():
+        out = merge_pdf(open_ensuring_pdf(fn) for fn in sorted(item_fns, key=sort_key))
+        yield id_, out
+
+
+def place_text(
+    fitz_page, s: str, relative_rect=None, absolute_rect=None, fontsize=10,
+):
+    text_rect = box.ensure_absolute_box(
+        relative_rect, absolute_rect, fitz_page.rect
+    )    
+    
+    fitz_page.insertTextbox(text_rect, buffer=s, fontsize=fontsize)
+    return fitz_page
 

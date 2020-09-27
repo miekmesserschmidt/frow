@@ -105,3 +105,37 @@ def test_bucket_merge(tmp_path):
     assert a.pageCount == 2
     assert b.pageCount == 3
 
+
+
+
+def test_bucket_merge_gen(tmp_path):
+    fns = pathlib.Path("test/fixtures/bucket_merge").glob("**/*")
+    fns = [str(fn) for fn in fns]
+    from frow.up import extract_first_st_num
+
+    for key, doc in pdf.bucket_merge_gen(fns, key=extract_first_st_num):
+        doc.save(os.path.join(tmp_path, f"{key}.pdf"))
+
+    a = fitz.open(os.path.join(tmp_path, "u00000000.pdf"))
+    b = fitz.open(os.path.join(tmp_path, "u00000001.pdf"))
+
+    assert a.pageCount == 2
+    assert b.pageCount == 3
+
+
+def test_place_text(tmp_path):
+    fn = "test/fixtures/bubble/real_pg_0001.pdf"
+    out = os.path.join(tmp_path, "b.pdf")
+
+    d = fitz.open(fn)
+
+    dd = pdf.place_text(d[0], "lorem", relative_rect=(.2,.2,.3,.3))
+    d.save(out)
+
+    assert inspect.is_pdf(out)
+
+    A = fitz.open(out)
+    assert A.pageCount == 1
+
+    # subprocess.call(["xdg-open", out])
+
