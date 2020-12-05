@@ -4,7 +4,7 @@ from PIL import Image
 import subprocess
 import os
 import pytest
-from frow.tools import qr
+from frow.tools import qr, pdf
 from frow.other import box
 from pyzbar.pyzbar import decode
 import functional
@@ -87,6 +87,39 @@ def test_read_json_qr(tmp_path, data):
     read_json = qr.read_json_qr(doc[0])
     # assert isinstance(read_json, dict)
     assert read_json == data
+    
+@pytest.mark.parametrize("data", 
+    [
+        {"type" : "page_info", "doc_id" : "fa3ab3", "page_no" :"1"},
+        {"type" : "page_info", "doc_id" : "verylongdocidnospaces", "page_no" :"1"},
+    ]
+)
+def test_read_json_qr_robust(tmp_path, data):
+    doc = qr.qr_pdf(json.dumps(data))
+    read_json = qr.read_json_qr_robust(doc[0])
+    # assert isinstance(read_json, dict)
+    assert read_json == data    
+    
+@pytest.mark.parametrize("data", 
+    [
+        {"type" : "page_info", "doc_id" : "fa3ab3", "page_no" :"1"},
+        {"type" : "page_info", "doc_id" : "verylongdocidnospaces", "page_no" :"1"},
+    ]
+)
+def test_read_json_qr_robust_fail(tmp_path, data):
+    doc = qr.qr_pdf(json.dumps(data))
+    with pytest.raises(ValueError):
+        read_json = qr.read_json_qr_robust(doc[0], relative_rect=(0,0,.1,.1))
+
+def test_read_json_qr_robust_fail_multiple():
+    doc = pdf.open_ensuring_pdf("test/fixtures/qr/multiple_qrs.pdf")
+    with pytest.raises(ValueError):
+        read_json = qr.read_json_qr_robust(doc[0], relative_rect=(0,0,1,1), zoom = 3)
+        print(read_json)
+
+    with pytest.raises(ValueError):
+        read_json = qr.read_json_qr_robust(doc[0], relative_rect=(0,0,1,1), zoom = [3,4,5])
+        print(read_json)
 
 
 @pytest.mark.parametrize("data", [

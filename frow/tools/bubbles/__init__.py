@@ -1,1 +1,1 @@
-from .easy import read
+from .easy import read, read_robust

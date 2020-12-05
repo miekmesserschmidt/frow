@@ -101,3 +101,24 @@ def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
 
     return frozendict.frozendict(json.loads(s))
 
+
+def read_json_qr_robust(fitz_page, relative_rect=None, absolute_rect=None, zoom=None):
+    if zoom is None:
+        zoom = range(2,10)
+    elif isinstance(zoom, int):
+        zoom = [zoom]
+        
+    w = None
+    for z in zoom:
+        try:
+            return read_json_qr(fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=z)
+            break
+        except ValueError as v:
+            w = v
+            pass
+    else:
+        raise w
+        
+    
+            
+    

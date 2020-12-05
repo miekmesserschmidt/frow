@@ -8,7 +8,7 @@ def read(
     fitz_page,
     relative_rect=None,
     absolute_rect=None,
-    zoom = 1,
+    zoom=1,
     bubble_reader_factory=default_bubble_reader_factory,
 ):
     """Reads a frow bubble array.
@@ -28,11 +28,45 @@ def read(
     """
 
     im = pdf.crop_to_pillow_image(
-        fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect,    zoom=zoom,
+        fitz_page, relative_rect=relative_rect, absolute_rect=absolute_rect, zoom=zoom,
     )
     try:
         reader = bubble_reader_factory.build_bubblereader(im)
     except ValueError as e:
-        raise ValueError(f"Error reading bubbles {fitz_page.parent}, p.{fitz_page.number+1} (index {fitz_page.number})", *e.args, )
-        
+        raise ValueError(
+            f"Error reading bubbles {fitz_page.parent}, p.{fitz_page.number+1} (index {fitz_page.number})",
+            *e.args,
+        )
+
     return reader.bubble_matrix()
+
+
+def read_robust(
+    fitz_page,
+    relative_rect=None,
+    absolute_rect=None,
+    zoom=None,
+    bubble_reader_factory=default_bubble_reader_factory,
+):
+    if zoom is None:
+        zoom = range(2, 10)
+    elif isinstance(zoom, int):
+        zoom = [zoom]
+
+    w = None
+    for z in zoom:
+        try:
+            return read(
+                fitz_page,
+                relative_rect=relative_rect,
+                absolute_rect=absolute_rect,
+                zoom=z,
+                bubble_reader_factory=bubble_reader_factory,
+            )
+            break
+        except ValueError as v:
+            w = v
+            pass
+    else:
+        raise w
+
