@@ -10,8 +10,8 @@ Welcome to frow's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   prose/intro
-
+   prose/intro   
+   prose/examples
    reference/api_ref
 
 

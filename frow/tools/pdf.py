@@ -233,6 +233,18 @@ def bucket_merge(buckets:dict):
 def place_text(
     fitz_page, s: str, relative_rect=None, absolute_rect=None, fontsize=10,
 ):
+    """Places text on the page.
+
+    Args:
+        fitz_page : Fitz page
+        s (str): string to plance
+        relative_rect ([type], optional): Relative rectangle to place inside of.
+        absolute_rect ([type], optional): Absolute rectangle to place inside of.
+        fontsize (int, optional): Font size. Defaults to 10.
+
+    Returns:
+        Fitz page
+    """
     text_rect = box.ensure_absolute_box(relative_rect, absolute_rect, fitz_page.rect)
 
     fitz_page.insertTextbox(text_rect, buffer=s, fontsize=fontsize)

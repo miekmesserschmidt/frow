@@ -62,6 +62,32 @@
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="frow.tools.bubbles.easy.read_robust">
+<code class="sig-prename descclassname">frow.tools.bubbles.easy.</code><code class="sig-name descname">read_robust</code><span class="sig-paren">(</span><em class="sig-param">fitz_page</em>, <em class="sig-param">relative_rect=None</em>, <em class="sig-param">absolute_rect=None</em>, <em class="sig-param">zoom=None</em>, <em class="sig-param">bubble_reader_factory=&lt;frow.tools.bubbles.reader.BubbleReaderFactory object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#frow.tools.bubbles.easy.read_robust" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a frow bubble array in a hopefully robust way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitz_page</strong> (<em>[</em><em>fitz page</em><em>]</em>) – Fitz page to read bubbles from</p></li>
+<li><p><strong>relative_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>absolute_rect</strong> (<em>4-tuple</em><em>, </em><em>optional</em>) – [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)</p></li>
+<li><p><strong>zoom</strong> (<em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em>) – zoom levels to try.</p></li>
+<li><p><strong>bubble_reader_factory</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Factory that produces BubbleReaders. Used if one wants to change the image preprocessors in bubble detection. Defaults to default_bubble_reader_factory.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the orientation qr code cannot be detected.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Numpy array of True/False values according to which bubbles are activated.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[numpy array]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-frow.tools.bubbles.make">
 <span id="frow-tools-bubbles-make"></span><h2>frow.tools.bubbles.make<a class="headerlink" href="#module-frow.tools.bubbles.make" title="Permalink to this headline">¶</a></h2>
@@ -323,12 +349,10 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../prose/intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">frow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="other.html">frow.other</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">frow.tools.bubbles</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.bubbles.easy">frow.tools.bubbles.easy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.bubbles.make">frow.tools.bubbles.make</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-frow.tools.bubbles.reader">frow.tools.bubbles.reader</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_ref.html">frow api reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tools.html">frow.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other.html">frow.other</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">frow.tools.bubbles</a></li>
 </ul>
 </li>
 </ul>
@@ -337,7 +361,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="api_ref.html">frow api reference</a><ul>
       <li>Previous: <a href="other.html" title="previous chapter">frow.other</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>

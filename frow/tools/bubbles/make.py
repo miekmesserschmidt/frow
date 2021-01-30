@@ -72,7 +72,7 @@ def make_qr_data(
         name ([type], optional): [description]. Defaults to None.
         grid_shape (tuple, optional): [description]. Defaults to (10, 10).
         qr_span (int, optional): [description]. Defaults to 4.
-        array_position (str, optional): [description]. Defaults to "right".
+        array_position (str, optional): [description]. Defaults to "right". ("left", "right", "up", "down")
 
     Returns:
         [dict]: 

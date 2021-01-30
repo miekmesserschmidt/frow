@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Examples &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="frow api reference" href="../reference/api_ref.html" />
+    <link rel="prev" title="Problem statement" href="problem.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="refit-pdf">
+<h2>Refit pdf<a class="headerlink" href="#refit-pdf" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to refit a pdf. This example pastes a page onto the rectangle 85% the size of an A4 page.</p>
+<p>See the example input and output here:</p>
+<p><a class="reference download internal" download="" href="../_downloads/c297f23b66ad6a05b666e587e22bf590/input.pdf"><code class="xref download docutils literal notranslate"><span class="pre">input.pdf</span></code></a>
+<a class="reference download internal" download="" href="../_downloads/aef234f372df8b88374c2c4e2c7245b2/output.pdf"><code class="xref download docutils literal notranslate"><span class="pre">output.pdf</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frow.tools</span> <span class="kn">import</span> <span class="n">pdf</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">open_ensuring_pdf</span><span class="p">(</span><span class="s2">&quot;input.pdf&quot;</span><span class="p">)</span>
+<span class="n">out_doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">refit_pdf</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">relative_paste_rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">85</span><span class="p">,</span><span class="o">.</span><span class="mi">85</span><span class="p">))</span>
+<span class="n">out_doc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-id-marks-to-every-page-of-a-pdf">
+<h2>Add id marks to every page of a pdf<a class="headerlink" href="#add-id-marks-to-every-page-of-a-pdf" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to add a page id mark to all pages of a pdf. The id mark is added to the bottom left relative rectangle (.05, .88, .5, .96).</p>
+<p>See the example input and output here:</p>
+<p><a class="reference download internal" download="" href="../_downloads/5adc5fc2fe499421fcee100c620686bd/input.pdf"><code class="xref download docutils literal notranslate"><span class="pre">input.pdf</span></code></a>
+<a class="reference download internal" download="" href="../_downloads/d5807babdfb59b8f7d7339671b485449/output.pdf"><code class="xref download docutils literal notranslate"><span class="pre">output.pdf</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frow.tools</span> <span class="kn">import</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">common</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">open_ensuring_pdf</span><span class="p">(</span><span class="s2">&quot;input.pdf&quot;</span><span class="p">)</span>
+<span class="n">out_doc</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">add_page_id_marks</span><span class="p">(</span>
+    <span class="n">doc</span><span class="p">,</span> 
+    <span class="p">{</span>
+        <span class="s2">&quot;doc_id&quot;</span><span class="p">:</span> <span class="s2">&quot;document_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data_element0&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+    <span class="p">},</span> 
+    <span class="n">relative_rect</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">05</span><span class="p">,</span> <span class="o">.</span><span class="mi">88</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">96</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">out_doc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-a-simple-bubble-array">
+<h2>Make a simple bubble array.<a class="headerlink" href="#make-a-simple-bubble-array" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to create a simple bubble array. Bubble arrays can be any size and encode any kind of information. A simple bubble array can be edited with any pdf editor (e.g. <a class="reference external" href="https://inkscape.org/">inkscape</a>) and text added to the bubbles.</p>
+<p>See the example output here:</p>
+<p><a class="reference download internal" download="" href="../_downloads/85b916148c162c416e9a042d61db0305/bubble_array_simple.pdf"><code class="xref download docutils literal notranslate"><span class="pre">bubble_array_simple.pdf</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span> <span class="nn">frow.tools.bubbles</span> <span class="kn">import</span> <span class="n">make</span>
+
+
+<span class="n">bubble_array_pdf</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_array</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+<span class="n">page</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bubble_array_pdf</span><span class="o">.</span><span class="n">pages</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">qr_data</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_qr_data</span><span class="p">(</span><span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span> <span class="n">array_position</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">qr_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">doc_out</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_recorder</span><span class="p">(</span><span class="n">qr_data</span><span class="p">,</span> <span class="n">bubble_array_pdf</span><span class="p">)</span>
+<span class="n">doc_out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;bubble_array_simple.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-a-bubble-array-and-add-text-to-the-array-using-frow">
+<h2>Make a bubble array and add text to the array using frow.<a class="headerlink" href="#make-a-bubble-array-and-add-text-to-the-array-using-frow" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to create a bubble array and add text with from.</p>
+<p>See the example output here:</p>
+<p><a class="reference download internal" download="" href="../_downloads/0c22f2ffec5e30af3822e9fbb1844524/bubble_array.pdf"><code class="xref download docutils literal notranslate"><span class="pre">bubble_array.pdf</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span> <span class="nn">frow.tools.bubbles</span> <span class="kn">import</span> <span class="n">make</span>
+
+
+<span class="n">text_array0</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;.5&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;4&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;5&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;6&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;7&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;8&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;9&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span><span class="s2">&quot;F&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">,</span><span class="s2">&quot;G&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">,</span><span class="s2">&quot;H&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">,</span><span class="s2">&quot;J&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span><span class="s2">&quot;I&quot;</span><span class="p">],</span>    
+<span class="p">]</span>
+
+
+<span class="n">text_array1</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;20&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;30&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;40&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;50&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;60&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;70&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;80&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;90&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+    <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>    
+<span class="p">]</span>
+
+<span class="n">bubble_array_pdf</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_array</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+<span class="n">page</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bubble_array_pdf</span><span class="o">.</span><span class="n">pages</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">make</span><span class="o">.</span><span class="n">insert_text_array</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">text_array0</span><span class="p">)</span>
+<span class="n">make</span><span class="o">.</span><span class="n">insert_text_array</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">text_array1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">14</span><span class="p">))</span>
+
+<span class="n">qr_data</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_qr_data</span><span class="p">(</span><span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span> <span class="n">array_position</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">qr_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">doc_out</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_recorder</span><span class="p">(</span><span class="n">qr_data</span><span class="p">,</span> <span class="n">bubble_array_pdf</span><span class="p">)</span>
+<span class="n">doc_out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;bubble_array.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-a-bubble-array-to-every-page-of-a-pdf">
+<h2>Add a bubble array to every page of a pdf<a class="headerlink" href="#add-a-bubble-array-to-every-page-of-a-pdf" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to paste a bubble array to every page of a pdf.</p>
+<p><a class="reference download internal" download="" href="../_downloads/27060b00a951c3dc115c41afd21d3374/input.pdf"><code class="xref download docutils literal notranslate"><span class="pre">input.pdf</span></code></a>
+<a class="reference download internal" download="" href="../_downloads/906bca0066e6223f77d1a247749e246e/output.pdf"><code class="xref download docutils literal notranslate"><span class="pre">output.pdf</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">from</span> <span class="nn">frow.tools</span> <span class="kn">import</span> <span class="n">pdf</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">open_ensuring_pdf</span><span class="p">(</span><span class="s2">&quot;input.pdf&quot;</span><span class="p">)</span>
+<span class="n">bubble_pdf</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">open_ensuring_pdf</span><span class="p">(</span><span class="s2">&quot;bubble_array.pdf&quot;</span><span class="p">)</span>
+
+<span class="n">out_doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">paste_pdf_on_every_page</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">bubble_pdf</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">87</span><span class="p">,</span> <span class="o">.</span><span class="mi">03</span><span class="p">,</span> <span class="o">.</span><span class="mi">98</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">out_doc</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.pdf&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="read-a-filled-bubble-array">
+<h2>Read a filled bubble array<a class="headerlink" href="#read-a-filled-bubble-array" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to read a user filled bubble array.</p>
+<p><a class="reference download internal" download="" href="../_downloads/851e76a71527f831d89633eceea78b69/input.pdf"><code class="xref download docutils literal notranslate"><span class="pre">input.pdf</span></code></a>
+<a class="reference download internal" download="" href="../_downloads/a64c46239e0ee658e7fded32f3cc123a/output.csv"><code class="xref download docutils literal notranslate"><span class="pre">output.csv</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frow.tools</span> <span class="kn">import</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">bubbles</span><span class="p">,</span> <span class="n">qr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+
+<span class="c1"># Values of the numeric bubbles</span>
+<span class="n">BUBBLEARRAY_NUMERIC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">90</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Values of the letter bubbles</span>
+<span class="n">BUBBLEARRAY_LETTERS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">open_ensuring_pdf</span><span class="p">(</span><span class="s2">&quot;input.pdf&quot;</span><span class="p">)</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">pages</span><span class="p">():</span>
+    <span class="c1"># read the bubble array</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">bubbles</span><span class="o">.</span><span class="n">easy</span><span class="o">.</span><span class="n">read_robust</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    
+    <span class="c1"># read page if mark qr code</span>
+    <span class="n">page_id_data</span> <span class="o">=</span> <span class="n">qr</span><span class="o">.</span><span class="n">read_json_qr</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Add up the total of numerc part of bubble array</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">BUBBLEARRAY_NUMERIC</span> <span class="o">*</span> <span class="n">arr</span><span class="p">)</span>
+    
+    <span class="c1"># Make a string from the letter pard of the bubble array</span>
+    <span class="n">letters_array</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">11</span><span class="p">:,</span> <span class="p">:]</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="n">BUBBLEARRAY_LETTERS</span><span class="p">[</span><span class="n">letters_array</span><span class="p">]</span>
+
+    <span class="c1"># make a row for csv output</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">page_id_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;doc_id&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> page </span><span class="si">{</span><span class="n">page_id_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page_index&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">total</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">letters</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem statement</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#refit-pdf">Refit pdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-id-marks-to-every-page-of-a-pdf">Add id marks to every page of a pdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-simple-bubble-array">Make a simple bubble array.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-bubble-array-and-add-text-to-the-array-using-frow">Make a bubble array and add text to the array using frow.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-a-bubble-array-to-every-page-of-a-pdf">Add a bubble array to every page of a pdf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#read-a-filled-bubble-array">Read a filled bubble array</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api_ref.html">frow api reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="problem.html" title="previous chapter">Problem statement</a></li>
+      <li>Next: <a href="../reference/api_ref.html" title="next chapter">frow api reference</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/prose/examples.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

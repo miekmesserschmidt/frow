@@ -1,0 +1,10 @@
+Examples
+================================
+
+Refit pdfs
+-----------------------------------
+
+asdf asdf 
+
+.. literalinclude:: ../examples/refit.py
+   :language: python

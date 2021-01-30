@@ -11,7 +11,3 @@ frow.other.multiprocess
 .. automodule:: frow.other.multiprocess
     :members:
 
-frow.other.pyfunctional_extensions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: frow.other.pyfunctional_extensions
-    :members:

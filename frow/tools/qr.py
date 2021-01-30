@@ -103,6 +103,20 @@ def read_json_qr(fitz_page, relative_rect=None, absolute_rect=None, zoom=2):
 
 
 def read_json_qr_robust(fitz_page, relative_rect=None, absolute_rect=None, zoom=None):
+    """Reads a qr code in what is hopefully a robust manner. 
+
+    Args:
+        fitz_page ([fitz page]): page to grab the data from.
+        relative_rect ([4-tuple], optional): [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        absolute_rect ([4-tuple], optional): [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        zoom (int, List[int]): List of zoom levels to try before failing.
+
+    Raises:
+        w: [description]
+
+    Returns:
+        [type]: [description]
+    """
     if zoom is None:
         zoom = range(2,10)
     elif isinstance(zoom, int):

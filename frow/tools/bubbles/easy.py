@@ -48,6 +48,22 @@ def read_robust(
     zoom=None,
     bubble_reader_factory=default_bubble_reader_factory,
 ):
+    """Reads a frow bubble array in a hopefully robust way.
+
+    Args:
+        fitz_page ([fitz page]): Fitz page to read bubbles from
+        relative_rect (4-tuple, optional): [description]. Relative rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        absolute_rect (4-tuple, optional): [description]. Absolute rect to grab data from. Defaults to None. (one of relative_window_rect or abs_window_rect must be None)
+        zoom (int, List[int]): zoom levels to try.
+        bubble_reader_factory ([type], optional): Factory that produces BubbleReaders. Used if one wants to change the image preprocessors in bubble detection. Defaults to default_bubble_reader_factory.
+
+    Raises:
+        ValueError: If the orientation qr code cannot be detected.
+
+    Returns:
+        [numpy array]: Numpy array of True/False values according to which bubbles are activated. 
+    """
+
     if zoom is None:
         zoom = range(2, 10)
     elif isinstance(zoom, int):

@@ -13,7 +13,21 @@ def add_page_id_marks(
     qr_kwargs={},
     paste_kwargs={},
 ):
-    # TODO docstring
+    """Adds a page id mark to every page of the document
+
+    Args:
+        fitz_doc : Fitz document to add id marks to
+        data_dict ([dict]): Data that forms part of the id mark
+        add_page_indices (bool, optional): Should page indices form part of the id marks. Defaults to True.
+        relative_rect ([type], optional): Relative rectangle to place the id marks. Defaults to None.
+        absolute_rect ([type], optional): Absolute rectangle to place the id marks. Defaults to None.
+        qr_kwargs (dict, optional): Keyword arguments passed to qr_pdf. Defaults to {}.
+        paste_kwargs (dict, optional): Keyword arguments passed to paste. Defaults to {}.
+
+    Returns:
+        Fitz doc
+    """
+    
 
     for i, page in enumerate(fitz_doc.pages()):
         d = {
