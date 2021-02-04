@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problem statement &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="problem-statement">
+<h1>Problem statement<a class="headerlink" href="#problem-statement" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="example-use-case-and-strategies">
+<h2>Example use case and strategies<a class="headerlink" href="#example-use-case-and-strategies" title="Permalink to this headline">¶</a></h2>
+<p>Consider the following example. Say we are teaching a course with 1000 students. The students write an exam with 10 questions. We have 10 team members helping grade the exam. We need to decide how to distribute the grading.</p>
+</div>
+<div class="section" id="strategies-for-distributed-grading">
+<h2>Strategies for distributed grading<a class="headerlink" href="#strategies-for-distributed-grading" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="traditional-vertical-grading-not-advised-offline-version">
+<h3>Traditional Vertical grading (Not advised. Offline version)<a class="headerlink" href="#traditional-vertical-grading-not-advised-offline-version" title="Permalink to this headline">¶</a></h3>
+<p>Split the 1000 papers into piles of 100. Assign one pile to one grader. Each grader grades <em>all</em> questions in all papers in their assigned pile.</p>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>Simple to administer.</p></li>
+<li><p>Grading happens in parallel.</p></li>
+<li><p>Entirely non-blocking. No grader blocks the progress of another.</p></li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul class="simple">
+<li><p>The grader needs to generalize to grading all questions.</p></li>
+<li><p>Grading is inconsistent. Two graders may assign different scores to the same answer. Weak graders may be wildly inconsistent.</p></li>
+<li><p>Scores need to be added up by hand.</p></li>
+<li><p>Integrity of question papers is not guaranteed once returned to students and are open to tampering.</p></li>
+</ul>
+</div>
+<div class="section" id="traditional-horizontal-grading-advised-offline-partially-blocking-version">
+<h3>Traditional Horizontal Grading (Advised. Offline + Partially blocking version)<a class="headerlink" href="#traditional-horizontal-grading-advised-offline-partially-blocking-version" title="Permalink to this headline">¶</a></h3>
+<p>Split the 1000 papers into piles of 100 that are stored centrally and labelled A,…,J. Each grader is assigned a single question and this question is graded in all papers. A grader checks out a pile of the central store, grades their question in all the papers in the pile, and returns the pile to the central store, checking it back in.</p>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>Grading is consistent.</p></li>
+<li><p>A grader specializes in a single question.</p></li>
+<li><p>A grader sees all attempts at their assigned question and gains an overview.</p></li>
+<li><p>Common mistakes that students make are recognized, and scored similarly.</p></li>
+<li><p>Questions can be strategically assigned. Questions that are difficult to grade, may be assigned to experienced graders.</p></li>
+<li><p>Grading happens in parallel.</p></li>
+<li><p>Grading happens in parallel. (see disadvantage ‘Partially non-blocking’)</p></li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul class="simple">
+<li><p>Not so simple to administer.</p></li>
+<li><p>Piles may go missing if not tracked effectively. This does happen in practice and causes great issues.</p></li>
+<li><p>Partially non-blocking. A slow grader may block the progress others. E.g., Grader Alice has graded all piles except for pile C, which is checked out by Grader Bob. Grader Bob is not answering his phone.</p></li>
+<li><p>Paging to the correct question can be time-consuming. Repeditive strain injuries may result.</p></li>
+<li><p>Scores need to be added up by hand.</p></li>
+<li><p>Integrity of question papers is not guaranteed once returned to students and are open to tampering.</p></li>
+</ul>
+</div>
+<div class="section" id="electronic-horizontal-grading-using-frow-advised-online-non-blocking-version">
+<h3>Electronic Horizontal Grading using frow (Advised. Online + Non-blocking version)<a class="headerlink" href="#electronic-horizontal-grading-using-frow-advised-online-non-blocking-version" title="Permalink to this headline">¶</a></h3>
+<p>All pages of all papers are scanned to pdf. All pages pertaining to a given question are collated into a separate pdf and distributed to the assigned grader. The assigned grader grades their assigned question electronically (e.g., on an ipad with an apple pencil) and returns the graded pdf. The graded pdfs are then recollated into 1000 separete pdfs, one for each student.</p>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>All advantages of Traditional Horizontal Grading.</p></li>
+<li><p>Entirely non-blocking. No grader blocks the progress of another.</p></li>
+<li><p>Electronic backups can be made at every step.</p></li>
+<li><p>Scores can be added automatically (e.g., using frow bubbles).</p></li>
+<li><p>Papers can be returned electronically to students.</p></li>
+<li><p>Original papers, once scanned can be archived immediately.</p></li>
+<li><p>Original papers can be retrieved and rescanned if the need arises.</p></li>
+<li><p>Integrity of original papers are guaranteed.</p></li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul class="simple">
+<li><p>Scanning of stapled documents may be time consuming (see strategies for scanning).</p></li>
+<li><p>One requires a system that is robust enough. (use frow)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="faq-for-using-frow-in-electronic-horizontal-grading">
+<h2>FAQ for using frow in <em>Electronic Horizontal Grading</em>:<a class="headerlink" href="#faq-for-using-frow-in-electronic-horizontal-grading" title="Permalink to this headline">¶</a></h2>
+<p><strong>How does one track pages electronically so that they may be collated and recollated automatically?</strong></p>
+<p>Use frow id marks to uniquely identify every page.</p>
+<p><strong>How does one keep track of which page belongs to which student, if one splits apart the papers?</strong></p>
+<p>Use frow id_marks together with a frow bubble array into which a student encodes their student id.</p>
+<p><strong>How can scores be added automatically?</strong></p>
+<p>Use a bubble array that can be read by frow to record scores.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api_ref.html">frow api reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/prose/problem.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

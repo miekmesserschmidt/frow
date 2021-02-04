@@ -1,0 +1,12 @@
+Introduction
+================================
+
+Frow is a toolset for working with pdf documents built on top of `pymupdf <https://pymupdf.readthedocs.io/en/latest/document.html>`_. The raison d'etre is to provide a general toolset for manipulating large volumes of pdfs for the purpose of education.
+
+An example use case is in manipulating scanned examinations. Every page receives a unique id-mark with data encoded into a qr-code along with a `bubble array <https://en.wikipedia.org/wiki/Optical_mark_recognition>`_ for recording grades. Submitted pdfs are split according to grading jobs. After grading is complete the bubble arrays are read by frow, and the pdfs reconstituted.
+
+See the examples for a demonstration of the basic uses of frow.
+
+
+
+

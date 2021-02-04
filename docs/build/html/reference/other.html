@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frow.other &#8212; frow 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="frow.tools.bubbles" href="bubbles.html" />
+    <link rel="prev" title="frow.tools" href="tools.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="frow-other">
+<h1>frow.other<a class="headerlink" href="#frow-other" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-frow.other.box">
+<span id="frow-other-box"></span><h2>frow.other.box<a class="headerlink" href="#module-frow.other.box" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-frow.other.multiprocess">
+<span id="frow-other-multiprocess"></span><h2>frow.other.multiprocess<a class="headerlink" href="#module-frow.other.multiprocess" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="frow.other.multiprocess.PickableFitzDoc">
+<em class="property">class </em><code class="sig-prename descclassname">frow.other.multiprocess.</code><code class="sig-name descname">PickableFitzDoc</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.multiprocess.PickableFitzDoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper that behaves like a fitz doc, but is picklable so can be used with multiprocessing.</p>
+<p>Pass it as constructor to frow.tools.pdf.open_ensuring_pdf.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="frow.other.multiprocess.PickableFitzPage">
+<em class="property">class </em><code class="sig-prename descclassname">frow.other.multiprocess.</code><code class="sig-name descname">PickableFitzPage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_args</span></em>, <em class="sig-param"><span class="n">doc_kwargs</span></em>, <em class="sig-param"><span class="n">page_index</span></em>, <em class="sig-param"><span class="n">doc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#frow.other.multiprocess.PickableFitzPage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper that behaves like a fits page, but is picklable so can be used with multiprocessing.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">frow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../prose/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prose/examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_ref.html">frow api reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tools.html">frow.tools</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">frow.other</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bubbles.html">frow.tools.bubbles</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="api_ref.html">frow api reference</a><ul>
+      <li>Previous: <a href="tools.html" title="previous chapter">frow.tools</a></li>
+      <li>Next: <a href="bubbles.html" title="next chapter">frow.tools.bubbles</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Miek Messerschmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/other.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

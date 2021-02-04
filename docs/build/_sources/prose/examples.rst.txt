@@ -17,7 +17,7 @@ See the example input and output here:
 Add id marks to every page of a pdf
 -----------------------------------
 
-The following example shows how to add a page id mark to all pages of a pdf. The id mark is added to the bottom left relative rectangle (.05, .88, .5, .96).
+The following example shows how to add a page id mark to all pages of a pdf. Id marks encode arbitrary json data. Here the id mark is added to the bottom left relative rectangle (.05, .88, .5, .96).
 
 See the example input and output here:
 
