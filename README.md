@@ -2,7 +2,7 @@ frow
 ====
 
 
-Frow is a python library build on top of [pymupdf](https://pymupdf.readthedocs.io/en/latest/) for manipulating pdfs. Frow's main goal case is to provide tools for creating and manipulating large volumes of pdfs in tertiary education.
+Frow is a python library build on top of [pymupdf](https://pymupdf.readthedocs.io/en/latest/) for manipulating pdfs. Frow's main goal is to provide tools for creating and manipulating large volumes of pdfs in tertiary education.
 
 Major features
 ----------------
