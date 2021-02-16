@@ -76,17 +76,10 @@
 <p>The following example shows how to create a simple bubble array. Bubble arrays can be any size and encode any kind of information. A simple bubble array can be edited with any pdf editor (e.g. <a class="reference external" href="https://inkscape.org/">inkscape</a>) and text added to the bubbles.</p>
 <p>See the example output here:</p>
 <p><a class="reference download internal" download="" href="../_downloads/85b916148c162c416e9a042d61db0305/bubble_array_simple.pdf"><code class="xref download docutils literal notranslate"><span class="pre">bubble_array_simple.pdf</span></code></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">from</span> <span class="nn">frow.tools.bubbles</span> <span class="kn">import</span> <span class="n">make</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frow.tools.bubbles.easy</span> <span class="kn">import</span> <span class="n">make</span>
 
-
-<span class="n">bubble_array_pdf</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_array</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
-<span class="n">page</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bubble_array_pdf</span><span class="o">.</span><span class="n">pages</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="n">qr_data</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_qr_data</span><span class="p">(</span><span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span> <span class="n">array_position</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">qr_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="n">doc_out</span> <span class="o">=</span> <span class="n">make</span><span class="o">.</span><span class="n">make_bubble_recorder</span><span class="p">(</span><span class="n">qr_data</span><span class="p">,</span> <span class="n">bubble_array_pdf</span><span class="p">)</span>
-<span class="n">doc_out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;bubble_array_simple.pdf&quot;</span><span class="p">)</span>
+<span class="n">bubble_array_pdf</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span> <span class="n">array_position</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">qr_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">bubble_array_pdf</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;bubble_array_simple.pdf&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
