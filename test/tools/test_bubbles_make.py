@@ -51,4 +51,4 @@ def test_bubbles_make_easy(tmp_path, pos):
     d = make_easy(grid_shape=(8,10), array_position=pos)
     d.save(fn)
 
-    subprocess.call(["xdg-open", fn])
+    # subprocess.call(["xdg-open", fn])
