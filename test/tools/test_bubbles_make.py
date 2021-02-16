@@ -6,6 +6,7 @@ import pytest
 import subprocess
 import os 
 from frow.tools.bubbles import make
+from frow.tools.bubbles.easy import make as make_easy
 from PIL import Image
 
 
@@ -37,3 +38,17 @@ def test_bubbles_make_recorder(tmp_path, pos):
     d.save(fn)
 
     # subprocess.call(["xdg-open", fn])
+
+
+@pytest.mark.parametrize("pos", ["right", "left", "up", "down"])
+def test_bubbles_make_easy(tmp_path, pos):
+    
+
+    fn = os.path.join(tmp_path, f"out.{pos}.pdf")
+    
+
+    text_array = [[str(i)]*8 for i in range(10)]
+    d = make_easy(grid_shape=(8,10), array_position=pos)
+    d.save(fn)
+
+    subprocess.call(["xdg-open", fn])

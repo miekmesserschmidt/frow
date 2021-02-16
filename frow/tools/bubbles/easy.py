@@ -1,5 +1,7 @@
 from .reader import BubbleReaderFactory
+from .make import make_qr_data, make_bubble_recorder, make_bubble_array
 from .. import pdf
+
 
 default_bubble_reader_factory = BubbleReaderFactory()
 
@@ -86,3 +88,22 @@ def read_robust(
     else:
         raise w
 
+
+def make(grid_shape=(10, 10), padding=0.1, scale=20, color=0.8, name=None, qr_span=4, array_position="right"):
+    """[summary]
+
+    Args:
+        grid_shape (tuple, optional): (w,h) size of the grid. Defaults to (10, 10).
+        padding (float, optional): Inner padding of every cell. Defaults to 0.1 (relative to scale).
+        scale (int, optional): Size of cell (in pts?). Defaults to 20.
+        color (float, optional): Color user to draw a cell. Grayscale in range [0,1]. Defaults to 0.8.
+        name ([type], optional): Optional name of the bubble recorder. Defaults to None.
+        qr_span (int, optional): Over how many cells should the qr code span. Defaults to 4.
+        array_position (str, optional): Position of the array relative to the qr code. Can take any of the values ("left", "right", "up", "down"). Defaults to "right".
+
+    Returns:
+        [type]: [description]
+    """
+    qr_data = make_qr_data(name=name, grid_shape=grid_shape, qr_span=qr_span, array_position=array_position)
+    array_doc = make_bubble_array(grid_shape=grid_shape, padding=padding, scale=scale, color=color)
+    return make_bubble_recorder(qr_data, array_doc)

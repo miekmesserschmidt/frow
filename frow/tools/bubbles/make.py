@@ -13,7 +13,7 @@ def make_bubble_array(
 
     Args:
         grid_shape (tuple, optional): Shape of the bubble array. Defaults to (10, 10).
-        padding (float, optional): Padding for each cell. Defaults to 0.1.
+        padding (float, optional): Inner padding for each cell. Defaults to 0.1.
         scale (int, optional): size of a cell. Defaults to 20.
         color (float, optional): Color used for the bubbles (See fitz colors). Defaults to 0.8.
 
@@ -39,7 +39,7 @@ def make_bubble_array(
 def insert_text_array(
     fitz_page, text_array, fontsize=11, color=0.8, scale=20, offset=(7, 14)
 ):
-    """Inserts a 2-d array of strings onto a fitz page at regular intervalse
+    """Inserts a 2-d array of strings onto a fitz page at regular intervals
 
     Args:
         fitz_page ([fitz page]): Page to insert text array on
@@ -77,13 +77,16 @@ def make_qr_data(
     Returns:
         [dict]: 
     """
-    return {
+    out =  {
         "type": type_,
-        "name": name,
         "array_position": array_position,
         "grid_shape": grid_shape,
         "qr_span": qr_span,
     }
+    if name is not None:
+        out["name"] = name
+    return out
+    
 
 
 def make_bubble_recorder(qr_data, array_fitz_doc):
@@ -140,4 +143,5 @@ def make_bubble_recorder(qr_data, array_fitz_doc):
     page.showPDFpage(arr_rect, array_fitz_doc)
 
     return d
+
 
