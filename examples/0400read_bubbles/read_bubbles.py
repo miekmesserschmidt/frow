@@ -39,15 +39,15 @@ doc = pdf.open_ensuring_pdf("input.pdf")
 
 rows = []
 for page in doc.pages():
-    # read the bubble array
+    # Read the bubble array on top right of page
     arr = bubbles.easy.read_robust(page, relative_rect=(0.8, 0, 1, 0.5))
-    
-    # read page if mark qr code
+
+    # Read page if mark qr code on bottom left of page
     page_id_data = qr.read_json_qr_robust(page, relative_rect=(0, 0.8, 0.4, 1))
 
-    # Add up the total of numerc part of bubble array
+    # Add up the total of numeric part of bubble array
     total = np.sum(BUBBLEARRAY_NUMERIC * arr)
-    
+
     # Make a string from the letter part of the bubble array
     letters_array = arr[11:, :]
     letters = BUBBLEARRAY_LETTERS[letters_array]
