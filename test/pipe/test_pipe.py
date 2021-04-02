@@ -5,7 +5,7 @@ def test_map():
     
     p = Pipe(["1234","2345", "3456"])
     
-    q=p.map(lambda x:x[1])
+    q=p.map(lambda x:x[1], show_progress=True, eager=True)
     
     assert q.list_items == ["2", "3", "4"]
     
@@ -98,13 +98,14 @@ def test_group_by():
     
 
 import time
+import random
 def sleeper(item):
-    time.sleep(1)
+    time.sleep(random.randint(2,4))
     return item
 
 def test_multimap_sleep():
     
     p = Pipe(range(10))
    
-    q=p.multi_map(sleeper)
+    q=p.multi_map(sleeper, show_progress=True)
     
