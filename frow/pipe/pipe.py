@@ -23,8 +23,6 @@ def wrap(iterator, wrap, yes):
         return iterator
 
 
-id = lambda x: x
-
 
 class Pipe:
     def __init__(self, items):

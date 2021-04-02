@@ -1,4 +1,6 @@
 from frow.pipe import Pipe
+import time
+import random
 
 
 def test_map():
@@ -31,10 +33,11 @@ def test_starmap_args():
 
 def test_map_args_kwargs():
     def w(item, ind=1):
+        time.sleep(1)
         return item[ind]
     
     p = Pipe(["1234","2345", "3456"])    
-    q=p.map(w, kwargs={"ind" : 3})    
+    q=p.map(w, kwargs={"ind" : 3}, show_progress=True)    
     assert q.list_items == ["4", "5", "6"]
     
 
@@ -97,8 +100,6 @@ def test_group_by():
     ]
     
 
-import time
-import random
 def sleeper(item):
     time.sleep(random.randint(2,4))
     return item
