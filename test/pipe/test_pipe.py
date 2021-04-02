@@ -7,14 +7,14 @@ def test_map():
     
     q=p.map(lambda x:x[1])
     
-    assert q.items == ["2", "3", "4"]
+    assert q.list_items == ["2", "3", "4"]
     
 
 def test_map_args():
     
     p = Pipe(["1234","2345", "3456"])    
     q=p.map(lambda x, r:x[r], args=(2,))    
-    assert q.items == ["3", "4", "5"]
+    assert q.list_items == ["3", "4", "5"]
     
 
 def test_starmap_args():
@@ -25,7 +25,7 @@ def test_starmap_args():
         ("34567", 2),
     ])    
     q=p.starmap(lambda x, i, r:x[i*r], args=(2,))    
-    assert q.items == ["1", "4", "7"]
+    assert q.list_items == ["1", "4", "7"]
 
 
 
@@ -35,7 +35,7 @@ def test_map_args_kwargs():
     
     p = Pipe(["1234","2345", "3456"])    
     q=p.map(w, kwargs={"ind" : 3})    
-    assert q.items == ["4", "5", "6"]
+    assert q.list_items == ["4", "5", "6"]
     
 
 def a(item):
@@ -47,7 +47,7 @@ def test_multimap():
     
     q=p.multi_map(a)
     
-    assert q.items == ["2", "3", "4"]
+    assert q.list_items == ["2", "3", "4"]
     
 
 def c(item, i, r):
@@ -61,7 +61,7 @@ def test_multi_map_args():
         ("34567", 2),
     ])    
     q=p.multi_starmap(c, args=(2,))    
-    assert q.items == ["1", "4", "7"]
+    assert q.list_items == ["1", "4", "7"]
 
 
 
@@ -72,7 +72,7 @@ def test_multi_starmap_args():
     
     p = Pipe(["1234","2345", "3456"])    
     q=p.multi_map(b, args=(2,))    
-    assert q.items == ["3", "4", "5"]
+    assert q.list_items == ["3", "4", "5"]
 
     
 
@@ -83,7 +83,7 @@ def test_multi_map_args_kwargs():
     
     p = Pipe(["1234","2345", "3456"])    
     q=p.multi_map(globalw, kwargs={"ind" : 3})    
-    assert q.items == ["4", "5", "6"]
+    assert q.list_items == ["4", "5", "6"]
     
 
 
@@ -91,7 +91,7 @@ def test_group_by():
     
     p = Pipe(["a1234","a2345", "b3456"])    
     q=p.group_by(key = lambda item: "a" in item)
-    assert q.items == [
+    assert q.list_items == [
         (True, ["a1234","a2345"]),
         (False, ["b3456"])
     ]

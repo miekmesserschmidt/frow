@@ -23,18 +23,23 @@ class Pipe:
     def __init__(self, items):
         self.items = items
         
+    @property
+    def list_items(self):
+        self.items = list(self.items)
+        return self.items
+        
     
     def map(self, worker, args=None, kwargs = None):
         args, kwargs = ensure_good_args_kwargs(args, kwargs)
         
-        out_items = [worker(item, *args, **kwargs) for item in self.items]
+        out_items = (worker(item, *args, **kwargs) for item in self.items)
         return Pipe(out_items)
 
 
     def starmap(self, worker, args=None, kwargs = None):
         args, kwargs = ensure_good_args_kwargs(args, kwargs)
         
-        out_items = [worker(*item, *args, **kwargs) for item in self.items]
+        out_items = (worker(*item, *args, **kwargs) for item in self.items)
         return Pipe(out_items)
             
 
