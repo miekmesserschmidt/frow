@@ -205,15 +205,15 @@
 
 <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">pages</span><span class="p">():</span>
-    <span class="c1"># read the bubble array</span>
+    <span class="c1"># Read the bubble array on top right of page</span>
     <span class="n">arr</span> <span class="o">=</span> <span class="n">bubbles</span><span class="o">.</span><span class="n">easy</span><span class="o">.</span><span class="n">read_robust</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
-    
-    <span class="c1"># read page if mark qr code</span>
+
+    <span class="c1"># Read page if mark qr code on bottom left of page</span>
     <span class="n">page_id_data</span> <span class="o">=</span> <span class="n">qr</span><span class="o">.</span><span class="n">read_json_qr_robust</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="c1"># Add up the total of numerc part of bubble array</span>
+    <span class="c1"># Add up the total of numeric part of bubble array</span>
     <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">BUBBLEARRAY_NUMERIC</span> <span class="o">*</span> <span class="n">arr</span><span class="p">)</span>
-    
+
     <span class="c1"># Make a string from the letter part of the bubble array</span>
     <span class="n">letters_array</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">11</span><span class="p">:,</span> <span class="p">:]</span>
     <span class="n">letters</span> <span class="o">=</span> <span class="n">BUBBLEARRAY_LETTERS</span><span class="p">[</span><span class="n">letters_array</span><span class="p">]</span>
