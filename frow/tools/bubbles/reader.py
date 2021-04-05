@@ -257,7 +257,6 @@ class BubbleReader:
         Returns:
             numpy.array: True/False activation values for the bubble array.
         """
-
         return self.block_activations >= threshold
 
 

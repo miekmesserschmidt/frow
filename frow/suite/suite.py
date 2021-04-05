@@ -107,6 +107,33 @@ def add_page_id_marks(
     return full_out_path
 
 
+
+
+def pdftk_flatten(fn, output_path, out_fn=None):
+    ensure_path(output_path)
+    out_fn = _extract_fn_from_path(fn) if out_fn is None else out_fn
+    full_out_path = os.path.join(output_path, out_fn)
+
+    command = f'pdftk {fn} output {full_out_path} flatten'
+    p1 = subprocess.call(command.split())
+    
+    return full_out_path
+
+
+def write_marks(fn, output_path, out_fn=None, rect=(0.8, 0, 1, 0.7)):
+    ensure_path(output_path)
+    out_fn = _extract_fn_from_path(fn) if out_fn is None else out_fn
+    full_out_path = os.path.join(output_path, out_fn)
+
+    doc = pdf.open_ensuring_pdf(fn)
+    for p in doc.pages():
+        page_total, _ = page_marks.read_bubble_array(p, rect)
+        pdf.place_text(p, str(page_total), relative_rect=(0.9, 0, 1, 0.1))
+
+    doc.save(full_out_path)
+    return full_out_path
+
+
 def read_id_marks(fn, rect=(0, 0.8, 0.4, 1)):
 
     doc = pdf.open_ensuring_pdf(fn)

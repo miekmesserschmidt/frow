@@ -40,7 +40,7 @@ def read(
             *e.args,
         )
 
-    return reader.bubble_matrix()
+    return reader.bubble_matrix(threshold=0.07)
 
 
 def read_robust(

@@ -132,3 +132,36 @@ def test_read_bubble_array(tmp_path):
     # suite.grind_through_image()
 
     print(p.list_items)
+
+
+def test_write_marks(tmp_path):
+
+    fns = [str(p) for p in pathlib.Path(fixture_path + "to_write_marks").glob("**/*")]
+
+    tmp0 = os.path.join(tmp_path, "tmp0")
+    tmp1 = os.path.join(tmp_path, "tmp1")
+    tmp2 = os.path.join(tmp_path, "tmp2")
+
+    p = (
+        Pipe(fns)
+        .map(
+            suite.pdftk_flatten,
+            kwargs={"output_path": tmp0},
+            eager=True,
+        )
+        .map(
+            suite.grind_through_image,
+            kwargs={"output_path": tmp1, "tmp_path": tmp_path},
+            eager=True,
+        )
+        .map(
+            suite.write_marks,
+            kwargs={"output_path": tmp2},
+            eager=True,
+        )
+    )
+
+    print(p.list_items)
+
+    # for item in p.list_items:
+    #     subprocess.call(["xdg-open", item])

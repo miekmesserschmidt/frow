@@ -8,6 +8,8 @@ import os
 from PIL import Image
 from frow.tools.bubbles import read
 from frow.tools.bubbles import reader
+from frow.tools import pdf
+
 
 # from frow.tools.bubbles import read as bubbles
 import frow.tools.bubbles as bubbles
@@ -87,6 +89,85 @@ real_expected2 = np.array(
 )
 
 
+
+error2_exp = np.array([
+    [1,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+
+    [0,0],
+
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+])
+
+
+error_exp = np.array([
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,1],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+
+    [0,0],
+
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+    [0,0],
+])
+
+
+@pytest.mark.parametrize(
+    "fn,expected",
+    [
+        (os.path.join(fixture_path, "error.pdf"), error_exp),
+        (os.path.join(fixture_path, "error2.pdf"), error2_exp),
+    ],
+)
+def test_bubble_matrix_real_world(fn, expected):
+
+
+    doc = fitz.open(fn)
+    p = list(doc.pages())[0]
+    im = pdf.crop_to_pillow_image(p, relative_rect=(.8,0,1,.7), zoom=3)
+    # im.show()
+
+    br = reader.BubbleReader(im)
+
+    # br.cropped_bubble_array.show()
+    # br.cropped_bubble_array.show()
+    # br.block_processed_bubble_array.show()
+
+    print("\n", br.block_activations)
+    print("\n", np.argmax(br.block_activations, axis=0))
+
+    # print("median ", np.median(br.block_activations))
+    # print("mean ",np.mean(br.block_activations))
+    # print("max ",np.max(br.block_activations))
+    # print("min ",np.min(br.block_activations))
+    print(br.bubble_matrix())
+    
+    assert (br.bubble_matrix() == expected).all()
+
+
+
 @pytest.mark.parametrize(
     "fn,expected,zoom",
     [
@@ -105,6 +186,8 @@ real_expected2 = np.array(
         (os.path.join(fixture_path, "real_photo.pdf"), real_expected2, 3),
         # (os.path.join(fixture_path, "shadowed.pdf"), real_expected2, 3),
         # (os.path.join(fixture_path, "real_dirty.pdf"), real_expected2, 3),
+        
+        
     ],
 )
 def test_bubble_matrix(fn, expected, zoom):
