@@ -1,9 +1,12 @@
+import functools
 import multiprocessing
 import os
 import contextlib
 import collections
+import itertools
 from itertools import chain
 from tqdm import tqdm
+import more_itertools
 
 
 def ensure_good_args_kwargs(args, kwargs):
@@ -22,7 +25,16 @@ def wrap(iterator, wrap, yes):
     else:
         return iterator
 
-
+def with_suppressed_errors(worker):
+    @functools.wraps(worker)
+    def suppressed_worker(*args, **kwargs):
+        try:
+            return worker(*args, **kwargs)
+        except Exception as e:
+            print(e)
+            
+    return suppressed_worker
+    
 
 class Pipe:
     def __init__(self, items):
@@ -41,7 +53,11 @@ class Pipe:
         eager=False,
         show_progress=False,
         star=False,
+        suppress_errors=False
     ):
+        
+        if suppress_errors:
+            worker = with_suppressed_errors(worker)
 
         args, kwargs = ensure_good_args_kwargs(args, kwargs)
         iterator = wrap(self.items, tqdm, show_progress)
@@ -55,23 +71,25 @@ class Pipe:
             out_items = list(out_items)
         return Pipe(out_items)
 
-    def map(self, worker, args=None, kwargs=None, eager=False, show_progress=False):
+    def map(self, worker, args=None, kwargs=None, eager=False, show_progress=False, suppress_errors=False):
         return self._map(
             worker,
             args=args,
             kwargs=kwargs,
             eager=eager,
             show_progress=show_progress,
+            suppress_errors=suppress_errors,
             star=False,
         )
 
-    def starmap(self, worker, args=None, kwargs=None, eager=False, show_progress=False):
+    def starmap(self, worker, args=None, kwargs=None, eager=False, show_progress=False, suppress_errors=False):
         return self._map(
             worker,
             args=args,
             kwargs=kwargs,
             eager=eager,
             show_progress=show_progress,
+            suppress_errors=suppress_errors,
             star=True,
         )
 
@@ -83,7 +101,11 @@ class Pipe:
         processes=10,
         show_progress=False,
         star=False,
+        suppress_errors=False,
     ):
+        if suppress_errors:
+            worker = with_suppressed_errors(worker)
+
         args, kwargs = ensure_good_args_kwargs(args, kwargs)
 
         with multiprocessing.Pool(processes) as pool:
@@ -106,17 +128,17 @@ class Pipe:
         return Pipe(results)
 
     def multi_map(
-        self, worker, args=None, kwargs=None, processes=10, show_progress=False
+        self, worker, args=None, kwargs=None, processes=10, show_progress=False, suppress_errors=False
     ):
         return self._multi_map(
-            worker, args=args, kwargs=kwargs, show_progress=show_progress, star=False
+            worker, args=args, kwargs=kwargs, show_progress=show_progress, star=False, suppress_errors=False,
         )
 
     def multi_starmap(
-        self, worker, args=None, kwargs=None, processes=10, show_progress=False
+        self, worker, args=None, kwargs=None, processes=10, show_progress=False, suppress_errors=False
     ):
         return self._multi_map(
-            worker, args=args, kwargs=kwargs, show_progress=show_progress, star=True
+            worker, args=args, kwargs=kwargs, show_progress=show_progress, star=True, suppress_errors=False,
         )
 
     def group_by(self, key):
@@ -127,3 +149,10 @@ class Pipe:
             d[key].append(item)
 
         return Pipe(list(d.items()))
+
+    def split(self, n=2):
+        return Pipe(list(zip(itertools.count(), more_itertools.divide(n, self.items))))
+        
+    def chain(self):        
+        return Pipe(list(chain(*self.items)))
+        
