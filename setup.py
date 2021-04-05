@@ -13,7 +13,7 @@ with pathlib.Path('requirements.txt').open() as requirements_txt:
 
 setup(
     name='frow',
-    version='1.1.0',
+    version='1.2.0',
     packages=find_packages(),    
     install_requires=install_requires,
     
