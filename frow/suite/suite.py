@@ -26,6 +26,16 @@ def ensure_path(path):
         os.makedirs(path)
 
 
+def fix_broken_pdf(fn, output_path, out_fn=None):
+    ensure_path(output_path)
+    out_fn = _extract_fn_from_path(fn) if out_fn is None else out_fn
+    full_out_path = os.path.join(output_path, out_fn)
+
+    command_list = ['pdftocairo', '-pdf', fn, full_out_path]
+    p1 = subprocess.call(command_list)
+
+    return full_out_path
+
 def key_merge(key, fn_list, output_path, out_fn=None):
     ensure_path(output_path)
     out_fn = key if out_fn is None else out_fn
@@ -76,11 +86,14 @@ def grind_through_image(
 
     full_tmp_root = os.path.join(tmp_path, out_fn)
     ensure_path(full_tmp_root)
+    
 
     command0 = f"pdftoppm -jpeg -r {density} -scale-to-x {width} -scale-to-y {int(1.4142*width)} {fn} {full_tmp_root}/{out_fn}"
+    print(command0)
     p0 = subprocess.call(command0.split())
 
     command1 = f"convert {full_tmp_root}/*.jpg {full_out_path}.pdf"
+    print(command1)
     p1 = subprocess.call(command1.split())
 
     return f"{full_out_path}.pdf"

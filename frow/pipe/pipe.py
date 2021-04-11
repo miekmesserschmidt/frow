@@ -51,7 +51,7 @@ class Pipe:
         worker,
         args=None,
         kwargs=None,
-        eager=False,
+        eager=True,
         show_progress=False,
         star=False,
         suppress_errors=False,
@@ -77,7 +77,7 @@ class Pipe:
         worker,
         args=None,
         kwargs=None,
-        eager=False,
+        eager=True,
         show_progress=False,
         suppress_errors=False,
     ):
@@ -96,7 +96,7 @@ class Pipe:
         worker,
         args=None,
         kwargs=None,
-        eager=False,
+        eager=True,
         show_progress=False,
         suppress_errors=False,
     ):
