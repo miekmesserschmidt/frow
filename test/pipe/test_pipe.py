@@ -156,8 +156,8 @@ def test_not_supressed():
                 raise ValueError("5 not allowed")
 
     p = Pipe(range(6))
-    with pytest.raises(ValueError):
-        q = p.map(A(), args=(2,), eager=True)
+    with pytest.raises(Exception):
+        q = p.map(A(), args=(5,), eager=True)
 
 
 def test_supressed():
