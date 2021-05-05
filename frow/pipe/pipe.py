@@ -37,6 +37,18 @@ def with_suppressed_errors(worker):
     return suppressed_worker
 
 
+def error_reporting_worker(worker):
+    @functools.wraps(worker)
+    def error_reporting_worker(*args, **kwargs):
+        try:
+            return worker(*args, **kwargs)
+        except Exception as e:
+            raise Exception(worker, args, kwargs, e)
+
+    return error_reporting_worker
+
+
+
 class Pipe:
     def __init__(self, items):
         self.items = items
@@ -56,6 +68,7 @@ class Pipe:
         star=False,
         suppress_errors=False,
     ):
+        worker = error_reporting_worker(worker)
 
         if suppress_errors:
             worker = with_suppressed_errors(worker)
@@ -120,6 +133,8 @@ class Pipe:
         star=False,
         suppress_errors=False,
     ):
+        
+        
         if suppress_errors:
             worker = with_suppressed_errors(worker)
 
