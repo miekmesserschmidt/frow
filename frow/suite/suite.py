@@ -99,6 +99,37 @@ def grind_through_image(
     return f"{full_out_path}.pdf"
 
 
+
+def pdf_to_images(
+    fn, output_path, density=300, width=1500, out_fn=None
+):
+    name = _extract_fn_from_path(fn) 
+    out_path = os.path.join(output_path, name)
+    ensure_path(out_path)
+
+  
+    command0 = f"pdftoppm -jpeg -r {density} -scale-to-x {width} -scale-to-y {int(1.4142*width)} {fn} {out_path}/{name}"
+    print(command0)
+    p0 = subprocess.call(command0.split())
+
+    return out_path
+
+
+def images_to_pdf(
+    path, output_path, density=300, width=1500, out_fn=None, files="*.jpg"
+):
+    ensure_path(output_path)
+    
+    name = _extract_fn_from_path(path) 
+    out_path = os.path.join(output_path, name)
+
+    command1 = f"convert {path}/{files} {out_path}.pdf"
+    print(command1)
+    p1 = subprocess.call(command1.split())
+
+    return f"{out_path}.pdf"
+  
+
 def add_page_id_marks(
     fn,
     data_dict,

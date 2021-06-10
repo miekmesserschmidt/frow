@@ -82,7 +82,7 @@ def read_robust(
                 bubble_reader_factory=bubble_reader_factory,
             )
             break
-        except ValueError as v:
+        except Exception as v:
             w = v
             pass
     else:
