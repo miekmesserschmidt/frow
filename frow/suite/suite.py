@@ -7,6 +7,9 @@ import os
 from . import page_marks
 
 
+class ProcessingError(Exception):
+    pass
+
 def extract_first_st_num(s):
     st_num_regex = re.compile(r"u\d{8}")
 
@@ -41,10 +44,15 @@ def key_merge(key, fn_list, output_path, out_fn=None):
     out_fn = key if out_fn is None else out_fn
     full_out_path = os.path.join(output_path, out_fn)
 
-    docs = [pdf.open_ensuring_pdf(fn) for fn in fn_list]
-    out_doc = pdf.merge_pdf(docs)
-    out_doc.save(full_out_path)
-    return full_out_path
+    try:
+        docs = [pdf.open_ensuring_pdf(fn) for fn in fn_list]
+        out_doc = pdf.merge_pdf(docs)
+        out_doc.save(full_out_path)
+        return full_out_path
+    except:
+        err = ProcessingError(f"Error in keymerge of {fn_list}")
+        print(err)
+        raise err
 
 
 def refit(fn, output_path, out_fn=None, rect=(0, 0, 0.85, 0.85)):
@@ -78,7 +86,7 @@ def paste_markrecorder(
 
 
 def grind_through_image(
-    fn, output_path, tmp_path, density=300, width=1500, out_fn=None
+    fn, output_path, tmp_path, density=300, width=1500, out_fn=None, verbose=False
 ):
     ensure_path(output_path)
     out_fn = _extract_fn_from_path(fn) if out_fn is None else out_fn
@@ -87,21 +95,22 @@ def grind_through_image(
     full_tmp_root = os.path.join(tmp_path, out_fn)
     ensure_path(full_tmp_root)
     
-
     command0 = f"pdftoppm -jpeg -r {density} -scale-to-x {width} -scale-to-y {int(1.4142*width)} {fn} {full_tmp_root}/{out_fn}"
-    print(command0)
-    p0 = subprocess.call(command0.split())
+    if verbose:
+        print(command0)
+    p0 = subprocess.run(command0, shell=True, check=True)
 
     command1 = f"convert {full_tmp_root}/*.jpg {full_out_path}.pdf"
-    print(command1)
-    p1 = subprocess.call(command1.split())
+    if verbose:
+        print(command1)
+    p1 = subprocess.run(command1, shell=True, check=True)
 
     return f"{full_out_path}.pdf"
 
 
 
 def pdf_to_images(
-    fn, output_path, density=300, width=1500, out_fn=None
+    fn, output_path, density=300, width=1500, out_fn=None, verbose=False,
 ):
     name = _extract_fn_from_path(fn) 
     out_path = os.path.join(output_path, name)
@@ -109,14 +118,15 @@ def pdf_to_images(
 
   
     command0 = f"pdftoppm -jpeg -r {density} -scale-to-x {width} -scale-to-y {int(1.4142*width)} {fn} {out_path}/{name}"
-    print(command0)
+    if verbose:
+        print(command0)
     p0 = subprocess.call(command0.split())
 
     return out_path
 
 
 def images_to_pdf(
-    path, output_path, density=300, width=1500, out_fn=None, files="*.jpg"
+    path, output_path, density=300, width=1500, out_fn=None, files="*.jpg", verbose=False,
 ):
     ensure_path(output_path)
     
@@ -124,7 +134,8 @@ def images_to_pdf(
     out_path = os.path.join(output_path, name)
 
     command1 = f"convert {path}/{files} {out_path}.pdf"
-    print(command1)
+    if verbose:
+        print(command1)
     p1 = subprocess.call(command1.split())
 
     return f"{out_path}.pdf"

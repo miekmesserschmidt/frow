@@ -16,7 +16,7 @@ A4 = np.array((0, 0, 595, 842))
 
 
 def refit_pdf(
-    in_, relative_paste_rect=None, abs_paste_rect=None, border=True,
+    in_, relative_paste_rect=None, abs_paste_rect=None, border=True, gutter=False
 ):
     """Refits all pages of a pdf. Used, e.g., to shrink pages' content a bit. 
 

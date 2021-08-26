@@ -209,3 +209,6 @@ class Pipe:
 
     def chain(self):
         return Pipe(list(chain(*self.items)))
+    
+    def sort(self, key=None):
+        return Pipe(sorted(self.items, key=key))

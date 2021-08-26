@@ -28,7 +28,6 @@ mypy-extensions==0.4.3
 numpy==1.19.1
 opencv-python==4.4.0.40
 packaging==20.4
-pandas==1.1.0
 pathspec==0.8.0
 pep517==0.8.2
 Pillow==7.2.0
